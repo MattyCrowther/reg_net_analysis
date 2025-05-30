@@ -1,0 +1,25 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700);
+
+body {
+    background-repeat: no-repeat;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.1);
+    font-family: 'Open+Sans', sans-serif !important;
+    font-size: 20px;
+}
+
+#app {
+    width: 60%;
+    min-width: 60%;
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2), 0px 26px 80px rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    padding: 0px;
+    margin-top: 50px;
+}
+
+.container {
+    background: #FFFFFF;
+}
