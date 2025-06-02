@@ -1,0 +1,162 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#main-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#graph_container {
+    width: 100%;
+    flex-grow: 1; /* Makes it take remaining space */
+    min-height: 70vh;
+}
+
+#graph {
+    width: 100%;
+    height: 100%;
+}
+
+/* Sidebar Toggle Button - Floating Arrow */
+.sidebar-toggle-button {
+    position: fixed;
+    top: 50%;
+    left: 10px;  /* Adjust for placement */
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #000; /* Black arrow */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1050; /* Ensure it's above everything */
+    opacity: 0.8; /* Slight transparency */
+}
+
+/* Hover effect */
+.sidebar-toggle-button:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.2);
+}
+
+/* Ensure Cytoscape graph doesn't block the button */
+#cytoscape-graph {
+    position: relative;  /* Ensure it doesn't take over */
+    z-index: 1; /* Lower than the button */
+}
+
+/* When the offcanvas is open (has .show), raise its z-index above the arrow */
+.offcanvas.show {
+    z-index: 2000 !important; 
+}
+
+#right_side {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Aligns items to the right */
+}
+
+.graph-legend {
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-size: 90%
+}
+
+.graph-legend .legend-scale ul {
+    margin: 0;
+    margin-bottom: 5px;
+    padding: 0;
+    float: left;
+    list-style: none
+}
+
+.graph-legend .legend-scale ul li {
+    font-size: 80%;
+    list-style: none;
+    margin-left: 0;
+    line-height: 18px;
+    margin-bottom: 2px
+}
+
+.graph-legend ul.legend-labels {
+    padding: 1%
+}
+
+.graph-legend ul.legend-labels li span {
+    display: block;
+    float: left;
+    height: 16px;
+    width: 30px;
+    margin-right: 5px;
+    margin-left: 0;
+    border: 1px solid #999
+}
+
+.graph-legend .legend-source {
+    font-size: 70%;
+    color: #999;
+    clear: both
+}
+
+.graph-legend a {
+    color: #777
+}
+
+.graph-legend {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+#node_data_output {
+    width: 100%;
+    padding: 10px;
+}
+
+#node_details_card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#node_details_card_body {
+    max-height: 50vh;
+    min-height: 100px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.misc-sidebar-toggle-button {
+    position: fixed;
+    top: 50%;
+    right: 10px;  /* Adjust for placement */
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #000; /* Black arrow */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1050; /* Ensure it's above everything */
+    opacity: 0.8; /* Slight transparency */
+}
+
+/* Hover effect */
+.misc-sidebar-toggle-button:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.2);
+}

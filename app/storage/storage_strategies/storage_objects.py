@@ -1,12 +1,9 @@
-from app.model.model import model
-
 class StorageObject():
     def __init__(self, identifier, object_type,
                  properties=None, relationships=None):
                 
         self._identifier = identifier
         self._object_type = object_type
-        
         self._properties = properties or {}
         self._relationships = relationships or {}
 
@@ -36,7 +33,7 @@ class StorageObject():
     def add_property(self, key, value):
         self._properties[key] = value
 
-    def _add_relationship(self, key, obj):
+    def add_relationship(self, key, obj):
         if key not in self._relationships:
             self._relationships[key] = []
         self._relationships[key].append(obj)

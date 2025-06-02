@@ -70,12 +70,16 @@ class Neo4jInterface:
         query,params = self.qry_builder.merge_node_query(label, identifier, properties)
         return [r[0] for r in self._run_cypher(query, params)]
     
-    def add_relationship(self, from_id: str, to_id: str, relationship_type: str, 
-                         from_label: Optional[str] = None, to_label: Optional[str] = None, 
+    def add_relationship(self, from_id: str, 
+                         to_id: str, relationship_type: str, 
+                         from_label: Optional[str] = None, 
+                         to_label: Optional[str] = None, 
                          properties: Optional[Dict] = None):
         properties = properties or {}
 
-        query = self.qry_builder.merge_relationship_query(from_label=from_label, to_label=to_label, rel_type=relationship_type)
+        query = self.qry_builder.merge_relationship_query(from_label=from_label, 
+                                                          to_label=to_label, 
+                                                          rel_type=relationship_type)
         params = {'from_id': from_id, 'to_id': to_id, 'properties': properties}
         
         return [r[0] for r in self._run_cypher(query, params)]
@@ -103,25 +107,50 @@ class Neo4jInterface:
         results = self._run_cypher(query, params)
         return results if get_relationships else [r[0] for r in results]
 
-    def get_relationship(self, from_label: Optional[str] = None, from_id: Optional[str] = None, 
-                         to_label: Optional[str] = None, to_id: Optional[str] = None, 
-                         relationship_type: Optional[str] = None):
+    def get_nodes(
+        self,
+        labels: Optional[list] = None,
+        identifiers: Optional[list] = None,
+        get_relationships: Optional[bool] = False
+    ):
+        query = self.qry_builder.get_nodes_query(
+            labels,
+            identifiers,
+            get_relationships=get_relationships
+        )
+
+        params = {}
+        if labels:
+            params["labels"] = list(labels)
+        if identifiers:
+            params["identifiers"] = list(identifiers)
+
+        results = self._run_cypher(query, params)        
+        return results
+    
+    def get_relationship(self, from_label: Optional[str] = None, 
+                         from_id: Optional[str] = None, 
+                         to_label: Optional[str] = None, 
+                         to_id: Optional[str] = None, 
+                         relationship_type: Optional[str] = None,
+                         return_nodes: Optional[bool] = False):
         
         query = self.qry_builder.get_relationship_query(from_label, to_label, 
                                                         relationship_type,
-                                                        from_id,to_id)
+                                                        from_id,to_id,
+                                                        return_nodes=return_nodes)
         params = {}
         if from_id:
             params["from_id"] = from_id
         if to_id:
             params["to_id"] = to_id
-        
-        return [r[0] for r in self._run_cypher(query, params)]
+        if not return_nodes:
+            return [r[0] for r in self._run_cypher(query, params)]
+        return self._run_cypher(query, params) 
     
     def get_relationships(self,node_identifier):
         query = self.qry_builder.get_relationships_query(node_identifier)
         params = {"node_identifier":node_identifier}
-        print(query)
         return self._run_cypher(query, params)
     
     def remove(self, identifier):

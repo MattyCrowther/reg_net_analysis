@@ -125,6 +125,46 @@ class QueryBuilder:
 
         return "\n".join(cypher)
 
+    def get_nodes_query(
+        self,
+        labels: Optional[list[str]] = None,
+        identifiers: Optional[list[str]] = None,
+        extra_filters: Optional[Dict[str, any]] = None,
+        get_relationships: bool = False,
+        rhs_identifier_key: str = "identifier"
+    ) -> str:
+        """
+        Returns a Cypher query to retrieve nodes that have any of the specified labels,
+        with optional property filters. When `get_relationships=True`, also returns
+        outgoing relationship types and connected node identifiers.
+        """
+        cypher = ["MATCH (n)"]
+        conditions = []
+
+        if labels:
+            conditions.append("ANY(lbl IN labels(n) WHERE lbl IN $labels)")
+
+        if identifiers:
+            conditions.append("n.identifier IN $identifiers")
+
+        if extra_filters:
+            for k in extra_filters:
+                conditions.append(f"n.{k} = $filter_{k}")
+
+        if conditions:
+            cypher.append("WHERE " + " AND ".join(conditions))
+
+        if get_relationships:
+            cypher.append(
+                f"OPTIONAL MATCH (n)-[r]->(m) "
+                f"RETURN n, COLLECT(DISTINCT {{r: TYPE(r), v: m.{rhs_identifier_key}}}) AS relationships"
+            )
+        else:
+            cypher.append("RETURN n")
+
+        return " ".join(cypher)
+
+    
     def get_relationship_query(
         self,
         from_label: Optional[str] = None,
@@ -132,9 +172,11 @@ class QueryBuilder:
         rel_type: Optional[str] = None,
         from_id: Optional[str] = None,
         to_id: Optional[str] = None,
+        return_nodes: Optional[bool] = False
     ) -> str:
         """
         Returns a query to get relationships with optional node labels, identifiers, and relationship type.
+        If return_nodes is True, also returns the connected nodes (a and b).
         """
         match_clause = "MATCH (a)-[r]->(b)"
         conditions = []
@@ -150,11 +192,15 @@ class QueryBuilder:
         if to_id:
             conditions.append(f"b.identifier = '{to_id}'")
 
-        where_clause = " AND ".join(conditions) if conditions else ""
+        where_clause = " AND ".join(conditions)
         query = f"{match_clause}\n"
         if where_clause:
             query += f"WHERE {where_clause}\n"
-        query += "RETURN r"
+
+        if return_nodes:
+            query += "RETURN a, r, b"
+        else:
+            query += "RETURN r"
 
         return query
 

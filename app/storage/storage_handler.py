@@ -19,6 +19,7 @@ class StorageHandler():
         existing_object_ids = self._storage.get_ids()
         for object in graph.get_objects():
             object = graph.get_object(object)
+            print(object,object.type)
             if str(object.id) in existing_object_ids:
                 print(f'Updating: {object.id}')
                 self.update(object.id,

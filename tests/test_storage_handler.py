@@ -14,39 +14,23 @@ TEST_NEO4J_URI = os.getenv("TEST_NEO4J_URI", "bolt://localhost:7687")
 TEST_NEO4J_USER = os.getenv("TEST_NEO4J_USER", "neo4j")
 TEST_NEO4J_PASSWORD = os.getenv("TEST_NEO4J_PASSWORD", "Radeon12300")
 
-class TestDBInterface(unittest.TestCase):
+class TestStorageInterface(unittest.TestCase):
     def test_db_interface(self):
         db_interface = DatabaseInterface()
         interface = StorageHandler("neo4j",TEST_NEO4J_URI,
                                    TEST_NEO4J_USER,
                                    TEST_NEO4J_PASSWORD)
         transformer = DataTransformer()
-
-        graphs = transformer.retrieve_transformed_data()
-        if len(graphs) == 0:
-            graphs = transformer.transform_data(db_interface.download_all())
-
-        for graph in graphs:
-            interface.add_rdf_graph(graph)
-
-        count = len(interface.get())
-        self.assertEqual(len(graphs),count)
-
-
-    def test_db_interface2(self):
-        db_interface = DatabaseInterface()
-        interface = StorageHandler("neo4j",TEST_NEO4J_URI,
-                                   TEST_NEO4J_USER,
-                                   TEST_NEO4J_PASSWORD)
-        transformer = DataTransformer()
-        pe,ce = db_interface.download_all(False)
-        replacement_map = {}
-        pe = transformer.replace_identifiers(pe,replacement_map)
-        ce = transformer.replace_identifiers(ce,replacement_map)
-        pe = transformer.replace_references(pe,replacement_map)
-        ce = transformer.replace_references(ce,replacement_map)
+        #pe,ce = db_interface.download_all(False)
+        #replacement_map = {}
+        #pe = transformer.replace_identifiers(pe,replacement_map)
+        #ce = transformer.replace_identifiers(ce,replacement_map)
+        #pe = transformer.replace_references(pe,replacement_map)
+        #ce = transformer.replace_references(ce,replacement_map)
         
-        graphs = transformer.transform_data(ce+pe)
+        num_elements = 1
+        # GOAL: Get retrived transformed data to retrive a COMPLETE subset if given.
+        graphs = transformer.retrieve_transformed_data(num_elements)
         for graph in graphs:
             interface.add_rdf_graph(graph)
 

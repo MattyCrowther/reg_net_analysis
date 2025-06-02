@@ -1,6 +1,6 @@
 import uuid
 import os
-
+from pathlib import Path
 
 from rdflib import URIRef
 from rdflib import Literal
@@ -67,7 +67,6 @@ class DataTransformer():
     def transform_data(self,records):
         graphs = []
         for record in records:
-            print(record)
             graph = self.transform(record)
             fn = os.path.join(storage_dir,f'{record.id.split("/")[-1]}.ttl')
             graph.serialize(fn,"ttl")
@@ -105,12 +104,43 @@ class DataTransformer():
         return RDFGraphWrapper(graph)
     
 
-    def retrieve_transformed_data(self):
-        graphs = []
+    def retrieve_transformed_data(self,max=None):
+        graphs = {}
+        count = 0
+
+        def _load_graph(fn):
+            nonlocal graphs
+            nonlocal count
+            if fn in graphs:
+                return
+            g = Graph()
+            g.parse(os.path.join(storage_dir,fn))
+            g = RDFGraphWrapper(g)
+            graphs[fn] = g
+            
+            for s,p,o in g.search((None,None,None)):
+                fn = self._find_file(self._get_name(o) + ".ttl")
+                if fn is not None:
+                    _load_graph(fn)
+                    count += 1
+            count += 1
+                    
         for file in os.listdir(storage_dir):
             if file.endswith(".ttl"):
-                g = Graph()
-                g.parse(os.path.join(storage_dir,file))
-                g = RDFGraphWrapper(g)
-            graphs.append(g)
-        return graphs
+                _load_graph(file)
+            if max is not None and count >= max:
+                return list(graphs.values())
+            
+        return list(graphs.values())
+
+
+
+
+    def _get_name(self,obj):
+        return obj.split("/")[-1]
+    
+    def _find_file(self,filename):
+        path = Path(storage_dir)
+        for file in path.rglob(filename):
+            return file
+        return None

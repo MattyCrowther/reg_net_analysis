@@ -63,26 +63,39 @@ class Neo4jStorage(AbstractStorage):
 
     def get(self, object_type=None, identifier=None,**kwargs):
         results = []
-        nodes = self._interface.get_node(label = object_type,
-                                         identifier=identifier,
-                                         get_relationships=True,
-                                         **kwargs)
+        if (isinstance(object_type,(list,set,tuple)) or 
+            isinstance(identifier,(list,set,tuple))):
+            nodes = self._interface.get_nodes(object_type,
+                                              identifier,
+                                              get_relationships=True)
+        else:
+            nodes = self._interface.get_node(label = object_type,
+                                            identifier=identifier,
+                                            get_relationships=True,
+                                            **kwargs)
         if identifier is not None:
             if len(nodes) == 0:
                 return None
-            return self._create_object(nodes[0][0],nodes[0][1])
+            if len(nodes) == 1:
+                return self._create_object(nodes[0][0],nodes[0][1])
         
         for node,rels in nodes:
             results.append(self._create_object(node,rels))
 
         return results
     
-    def get_edges(self,identifier):
+    def get_edges(self,identifier=None,
+                  edge_type=None):
         # Mainly for case where node is taken without rels (namely GDS stuff)
         results = []
-        for _,e,v in self._interface.get_relationships(identifier):
-            print("\n\n\n")
-            results.append((e.type,self._create_object(v)))
+        if identifier is not None:
+            for _,e,v in self._interface.get_relationships(identifier):
+                results.append((e.type,self._create_object(v)))
+        if edge_type is not None:
+            for n,e,v in self._interface.get_relationship(relationship_type=edge_type,
+                                                      return_nodes=True):
+                results.append((self._create_object(n),
+                                self._create_object(v),e))
         return results
 
     def node_count(self):

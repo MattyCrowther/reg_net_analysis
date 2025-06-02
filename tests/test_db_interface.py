@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.join(".."))
 sys.path.insert(0, os.path.join("..", ".."))
 sys.path.insert(0, os.path.join("..", "..", ".."))
 
-from db_interface.db_interface import DatabaseInterface
+from app.tools.db_interface.db_interface import DatabaseInterface
 
 class TestDBInterface(unittest.TestCase):
     def test_db_interface(self):

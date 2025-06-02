@@ -17,7 +17,7 @@ from flask_login import login_required
 
 from app.utility import forms
 from app.utility.login import LoginHandler
-from app.tools.visualiser.dashboard import DashBoard
+from app.tools.visualiser.dashboards.full.dash import Dashboard 
 from app.storage.storage_strategies.neo4j.storage import Neo4jStorage
 from app.tools.db_interface.db_interface import DatabaseInterface
 from app.tools.data_transformer.data_transformer import DataTransformer
@@ -47,7 +47,7 @@ data_transformer = DataTransformer()
 storage_graph = Neo4jStorage(**config["EXPERIMENT_STORAGE"])
 
 # Tools
-design_dash = DashBoard(__name__, server, storage_graph)
+design_dash = Dashboard(storage_graph,__name__, server)
 design_dash.app.enable_dev_tools(debug=True)
 
 app = DispatcherMiddleware(

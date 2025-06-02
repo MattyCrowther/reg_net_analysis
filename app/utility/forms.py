@@ -13,6 +13,20 @@ from wtforms.form import BaseForm
 from wtforms import PasswordField
 from wtforms import FieldList
 
+class CreateUserForm(FlaskForm):
+    class Meta:
+        csrf = False
+    username = TextAreaField("Username", validators=[validators.InputRequired()])
+    password = PasswordField("Password", validators=[validators.InputRequired()])
+    submit = SubmitField("Submit")
+
+class CreateAdminForm(FlaskForm):
+    class Meta:
+        csrf = False
+    username = TextAreaField("Username", validators=[validators.InputRequired()])
+    password = PasswordField("Password", validators=[validators.InputRequired()])
+    submit = SubmitField("Submit")
+
 class RebuildGraph(FlaskForm):
     class Meta:
         csrf = False

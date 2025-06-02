@@ -103,19 +103,19 @@ class RegulonDB(AbstractDatabase):
         """Fetch all core biological entities."""
         all_data = {}
 
-        genes = self.fetch_all_genes(30)
+        genes = self.fetch_all_genes(3)
         for gene in genes:
             all_data = self._process_gene(gene,all_data)
 
-        operons = self.fetch_all_operons(30)
+        operons = self.fetch_all_operons(3)
         for operon in operons:
             all_data = self._process_operon(operon,all_data)
        
-        regulons = self.fetch_all_regulons(30)
+        regulons = self.fetch_all_regulons(3)
         for regulon in regulons:
             all_data = self._process_regulon(regulon,all_data)
         
-        sigmulons = self.fetch_all_sigmulons(30)
+        sigmulons = self.fetch_all_sigmulons(3)
         for sigmulon in sigmulons:
             all_data = self._process_sigmulon(sigmulon,all_data)
 

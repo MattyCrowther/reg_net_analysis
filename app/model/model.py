@@ -71,12 +71,32 @@ class ModelGraph:
                 
         else:
             raise ValueError(equivalent)
-
+    
+    def get_classes(self):
+        return [r[0][1]["key"] for r in 
+                self.search((None,None,OWL.Class)) 
+                if isinstance(r[0][1]["key"],URIRef)]
+    
+    def get_relationships(self):
+        return [r[0][1]["key"] for r in 
+                self.search((None,RDF.type,OWL.ObjectProperty)) 
+                if isinstance(r[0][1]["key"],URIRef)]
+    
     def is_relationship(self,predicate):
         cls_code = self._get_class_code(predicate)
         if len(self.search((cls_code,RDF.type,OWL.ObjectProperty),lazy=True)) == 0:
             return False
         return True
+    
+    def get_all_subclasses(self,cls, visited=None):
+        if visited is None:
+            visited = set()
+        for s, _, _ in self.search((None, RDFS.subClassOf, cls)):
+            s = s[1]["key"]
+            if s not in visited:
+                visited.add(s)
+                visited |= self.get_all_subclasses(s, visited)
+        return visited
 
     def _get_class_code(self,label):
         if not isinstance(label,list):
