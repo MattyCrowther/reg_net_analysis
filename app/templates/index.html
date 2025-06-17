@@ -1,26 +1,24 @@
-{% extends "base.html" %} {% block content %}
-<div class="row gx-5 index_row">
-    <div class="col-6 mx-auto" align="center">
-        <img src="{{url_for('static', filename='logo.png')}}" class="rounded float-left" id="logo">
-    </div>
-</div>
-<div class="row gx-5 index_row">
-    <div class="col-6">
-        <p>
-            "Complex systems are systems whose behaviour is intrinsically difficult to model due to the
-            dependencies, competitions, relationships, or other interactions between their parts or between a given
-            system and its environment." Biology is packed with complex systems which are often challenging to
-            comprehend. Genetta represents genetic designs as networks. This representation allows analysis and
-            transformations to be applied to tailor visualisation based on requirements.
-        </p>
-    </div>
-</div>
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-3"> <!-- Add container and tighter padding -->
+  <div class="text-center mb-4">
+    <img src="{{url_for('static', filename='logo.png')}}" alt="" id="logo_medium">
+  </div>
+  <div class="text-center mb-4">
+    <h1 class="mt-3">Network Analysis Tool</h1>
+  </div>
 
-<div class="row gx-5 index_row">
-</div>
-
-<div class="row gx-5 index_row">
-</div>
-<div class="col-6">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <p>
+        "Complex systems are systems whose behaviour is intrinsically difficult to model due to the
+        dependencies, competitions, relationships, or other interactions between their parts or between a given
+        system and its environment." Biology is packed with complex systems which are often challenging to
+        comprehend. Genetta represents genetic designs as networks. This representation allows analysis and
+        transformations to be applied to tailor visualisation based on requirements.
+      </p>
+    </div>
+  </div>
+  
 </div>
 {% endblock %}

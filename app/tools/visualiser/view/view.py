@@ -1,49 +1,115 @@
-import re
+import networkx as nx
+
+from app.tools.visualiser.view.edge import Edge
+from app.tools.visualiser.view.node import Node
 
 class View:
-    def __init__(self, elements=None): 
-        self._elements = elements
+    def __init__(self, graph=None): 
+        self._graph = graph if graph is not None else nx.MultiDiGraph()
         
     def __len__(self):
-        return len(self._elements)
+        return len(self._graph)
+
+    def __eq__(self, obj):
+        if isinstance(obj, self.__class__):
+            return nx.is_isomorphic(self._graph, obj._graph)
+        if isinstance(obj, nx.MultiDiGraph):
+            return nx.is_isomorphic(self._graph, obj)
+        return False
 
     def __iter__(self):
-        for n in self._elements:
+        for n in self._graph.nodes:
             yield n
 
-    def __getitem__(self, item):
-        return self._elements[item]
-    
-    def add_element(self,element):
-        self._elements.append(element)
-    
-    def remove_element(self, element):
-        if isinstance(element, str):
-            self._elements = [el for el in self._elements if el.identifier != element]
+    def _node(self,label,id,properties=None):
+        if properties is None:
+            props = {}
         else:
-            if element in self._elements:
-                self._elements.remove(element)
-
-    def relationships(self):
-        for element in self._elements:
-            for rel_type,rels in element.relationships.items():
-                for rel in rels:
-                    yield (element,rel_type,rel)
-
-    def get_element(self,element_id):
-        for element in self._elements:
-            if element.identifier == element_id:
-                return element
-
-    def get_relationship(self,source_id,target_id):
-        element = self.get_element(source_id)
-        for rt,rels in element.relationships.items():
-            for rel in rels:
-                if rel == target_id:
-                    return rt
-                
-    def has_element(self,element):
-        return element in [e.identifier for e in self._elements]
+            props = properties
+        
+        return Node(id,label,**props)
     
-    def add(self, element):
-        self._elements.append(element)
+    def _edge(self,n,v,e,properties=None):
+        if properties is None:
+            props = {}
+        else:
+            props = properties
+        return Edge(n,v,e,**props)
+
+    def nodes(self):
+        for n,data in self._graph.nodes(data=True):
+            props = data.copy()
+            label = props.pop("type")
+            yield self._node(label,n,properties=props)
+
+    def edges(self,n=None):
+        if isinstance(n,Node):
+            n = n.id
+
+        for n,v,e,d in self._graph.edges(n,keys=True,data=True):
+            props = self._graph.nodes[n].copy()
+            o_type = props.pop("type")
+            n = self._node(o_type,n,properties=props)
+
+            props = self._graph.nodes[v].copy()
+            o_type = props.pop("type")
+            v = self._node(o_type,v,properties=props)
+            yield self._edge(n,v,e,properties=d)
+        
+    def get_edge_type(self,n,v):
+        return list(self._graph.get_edge_data(n,v).keys())[0]
+
+    def get_node(self,n=None):
+        if n is None:
+            return list(self.nodes())
+        data = self._graph.nodes[n]
+        props = data.copy()
+        o_type = props.pop("type")
+        return self._node(o_type,id=n,properties=props)
+
+    def in_edges(self, node=None):
+        for n,v,e,d in self._graph.in_edges(node,keys=True,data=True):
+            props = self._graph.nodes[n].copy()
+            o_type = props["key"]
+            del props["key"]
+            n = self._node(o_type,id=n,properties=props)
+
+            props = self._graph.nodes[v].copy()
+            o_type = props["key"]
+            del props["key"]
+            v = self._node(o_type,id=v,properties=props)
+            yield self._edge(n,v,e,properties=d)
+
+    def out_edges(self, node=None):
+        for n,v,e,d in self._graph.out_edges(node,keys=True,data=True):
+            props = self._graph.nodes[n].copy()
+            o_type = props["key"]
+            del props["key"]
+            n = self._node(o_type,id=n,properties=props)
+
+            props = self._graph.nodes[v].copy()
+            o_type = props["key"]
+            del props["key"]
+            v = self._node(o_type,id=v,properties=props)
+            yield self._edge(n,v,e,properties=d)
+
+    def has_edge(self,edge):
+        return self._graph.has_edge(edge.n,
+                                    edge.v,
+                                    key=edge.type)
+    
+    def add_edge(self, edge):
+        self._graph.add_edge(edge.n,
+                             edge.v,
+                             edge.type,
+                             **edge.properties)
+
+    def add_node(self, node):
+        self._graph.add_node(node.id,
+                             type=node.type,
+                             **node.properties)
+
+
+
+
+            

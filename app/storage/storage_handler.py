@@ -3,6 +3,10 @@ from app.storage.storage_strategies.file_system.storage import FileSystemStorage
 storage_mechanisms = {"file": FileSystemStorage,
                       "neo4j" : Neo4jStorage}
 
+'''
+Check the export data works...
+The graph analysis bit.....
+'''
 class StorageHandler():
     def __init__(self, code,*args,**kwargs):
         if code not in storage_mechanisms:
@@ -19,7 +23,6 @@ class StorageHandler():
         existing_object_ids = self._storage.get_ids()
         for object in graph.get_objects():
             object = graph.get_object(object)
-            print(object,object.type)
             if str(object.id) in existing_object_ids:
                 print(f'Updating: {object.id}')
                 self.update(object.id,
@@ -47,3 +50,11 @@ class StorageHandler():
 
     def remove(self,identifier):
         self._storage.remove(identifier)
+
+
+    def export(self,filename):
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(self._storage.export())
+
+    def load(self,filename):
+        return self._storage.load(filename)

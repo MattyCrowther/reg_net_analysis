@@ -185,3 +185,23 @@ class Neo4jInterface:
         return [item for sublist in self._run_cypher(qry) 
                 for item in sublist] 
         
+    def export(self):
+        qry = self.qry_builder.export()
+        result = self._driver.run_cypher(qry)
+
+        raw_data = result.iloc[0]["data"]  # already a real NDJSON string
+
+        # No json.loads here! Just split the lines directly
+        lines = raw_data.strip().split("\n")
+
+        parsed = []
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                parsed.append(json.loads(line))
+            except json.JSONDecodeError as e:
+                print(f"Failed to parse line:\n{line[:100]}")
+                print(f"Error: {e}")
+        return parsed

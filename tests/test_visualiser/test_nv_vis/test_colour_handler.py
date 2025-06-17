@@ -26,9 +26,9 @@ class TestColourHandler(unittest.TestCase):
                                                    colour_type="type")
         stylesheet = self.visualiser.get_style()
         self.assertEqual(len(pre_elements),len(elements))
-        all_classes = [str(n) for n in model.get_classes()]
+        all_classes = [str(n).split("/")[-1] for n in model.get_classes()]
         for e in elements:
-            class_type =  e["classes"].replace("http_//", "http://")
+            class_type =  e["classes"]
             if not self.visualiser._node_colour_handler._is_node(e):
                 continue
             if any(item in class_type for item in all_classes):
@@ -59,9 +59,10 @@ class TestColourHandler(unittest.TestCase):
                                                    colour_type="type")
         stylesheet = self.visualiser.get_style()
         self.assertEqual(len(pre_elements),len(elements))
-        all_relationships = [str(n) for n in model.get_relationships()]
+        all_relationships = [str(n).split("/")[-1] 
+                             for n in model.get_relationships()]
         for e in elements:
-            rel_type =  e["classes"].replace("http_//", "http://")
+            rel_type =  e["classes"]
             if self.visualiser._node_colour_handler._is_node(e):
                 continue
             elif any(item in rel_type for item in all_relationships):

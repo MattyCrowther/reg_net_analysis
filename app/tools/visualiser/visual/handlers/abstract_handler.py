@@ -74,6 +74,9 @@ class HandlerABC(ABC):
         suffix = suffix.replace(":","_")
         return f'{self._build_prefix()}_{suffix}'
     
+    def _get_name(self,uri):
+        return uri.split("/")[-1]
+    
     def _remove_old_classes(self,elements):
         # Can this be optimised?
         for e in elements:

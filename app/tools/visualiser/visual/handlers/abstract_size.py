@@ -24,8 +24,8 @@ class SizeHandler(HandlerABC):
             # Its an edge
             if not self._is_node(element):
                 continue
-            node = cur_view.get_element(element["data"]["id"])
-            node_type = node.object_type
+            node = cur_view.get_node(element["data"]["id"])
+            node_type = node.type
             if node_type is None:
                 element["data"]["size"] = self._standard_node_size/2
             else:
@@ -39,11 +39,9 @@ class SizeHandler(HandlerABC):
         for elem in elements:
             if not self._is_node(elem):
                 continue
-            node = cur_view.get_element(elem["data"]["id"])
-            count = 0
-            for rels in node.relationships.values():
-                count += len(rels)
-            node_degrees[node.identifier] = count
+            node = cur_view.get_node(elem["data"]["id"])
+            count = len(list(cur_view.edges(node)))
+            node_degrees[node.id] = count
         
         max_degree = max(node_degrees.values(), default=1)
         

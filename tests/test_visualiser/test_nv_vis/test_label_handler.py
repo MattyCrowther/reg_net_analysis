@@ -29,9 +29,8 @@ class TestLabelHandler(unittest.TestCase):
         for e in elements:
             if not self.visualiser._node_colour_handler._is_node(e):
                 continue
-            node = view.get_element(e["data"]["id"])
-            self.assertEqual(e["data"]["label"],
-                             node.properties[str(model.identifiers.external.title)])
+            node = view.get_node(e["data"]["id"])
+            self.assertEqual(e["data"]["label"],node.properties[str(model.identifiers.external.title)][0])
 
     def test_node_class_type(self):
         self.visualiser.set_view()

@@ -35,11 +35,22 @@ class AbstractObject:
             return False
         return self._identifier == value._identifier
     
-    def merge(self,other):
+    def merge(self, other):
         if not isinstance(other, AbstractObject) or self.id != other.id:
             raise ValueError("Can only merge with the same ID and compatible type.")
+
         self._synonyms = list(set(self._synonyms + other.synonyms))
-        self._metadata.update(other._metadata)
+
+        for k, v in other._metadata.items():
+            if k not in self._metadata or not self._metadata[k]:
+                self._metadata[k] = v
+
+        if not self._name and other._name:
+            self._name = other._name
+
+        if other._confidence is not None:
+            if self._confidence is None or other._confidence > self._confidence:
+                self._confidence = other._confidence
 
     def replace_id(self,id):
         self._identifier = id
@@ -178,8 +189,16 @@ class PhysicalEntity(AbstractObject):
 
     def merge(self, other):
         super().merge(other)
+        if not self._sequence and other._sequence:
+            self._sequence = other._sequence
         self._roles = list(set(self._roles + other.roles))
-        self._relationships["contains"] = list(set(self._relationships["contains"] + other._relationships["contains"]))
+        self._relationships["contains"] = list(
+            set(self._relationships["contains"] + other._relationships["contains"])
+        )
+        if not self._name and other._name:
+            self._name = other._name
+        if self._confidence is None and other._confidence is not None:
+            self._confidence = other._confidence
         
 
     def to_json(self):
@@ -202,11 +221,15 @@ class ConceptualEntity(AbstractObject):
     @property
     def participants(self):
         return self._relationships["participants"]
-    
+        
     def merge(self, other):
         super().merge(other)
-        self._relationships["participants"] = list(set(self._relationships["participants"] + 
-                                                       other._relationships["participants"]))
+
+        # Merge participants (deduplicated)
+        self._relationships["participants"] = list(
+            set(self._relationships["participants"] + 
+                other._relationships["participants"]))
+
 
 class TYPES(Enum):
     GENE = "GENE"

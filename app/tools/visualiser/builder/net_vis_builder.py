@@ -2,10 +2,12 @@
 from app.tools.visualiser.builder.abstract import Builder
 from app.tools.visualiser.view.view import View
 from app.tools.visualiser.builder.builders.net_vis.interaction import InteractionBuilder
+from app.tools.visualiser.builder.builders.net_vis.interaction import VerboseInteractionBuilder
 from app.tools.visualiser.builder.builders.net_vis.structural import StructuralViewBuilder
 class NetVisBuilder(Builder):
     def __init__(self, storage):
         super().__init__(storage)
+        self._view_builder = StructuralViewBuilder(self._storage)
 
     def expand_node(self,node_id):
         new_elements = []

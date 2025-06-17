@@ -19,8 +19,13 @@ class TestDataTransformer(unittest.TestCase):
         replacement_map = {}
         pe = transformer.replace_identifiers(pe,replacement_map)
         ce = transformer.replace_identifiers(ce,replacement_map)
+        pe = transformer.canonicalise(pe,replacement_map)
+        ce = transformer.canonicalise(ce,replacement_map)
         pe = transformer.replace_references(pe,replacement_map)
         ce = transformer.replace_references(ce,replacement_map)
+
+        
+
 
         # -- Test
         for p in pe:

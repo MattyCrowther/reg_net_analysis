@@ -2,12 +2,14 @@ import os
 import shutil
 import json
 import yaml
+import io
 
 from flask import Flask
 from flask import session
 from flask import render_template
 from flask import redirect
 from flask import request
+from flask import send_file
 from flask import url_for
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from flask_login import current_user
@@ -22,6 +24,8 @@ from app.storage.storage_strategies.neo4j.storage import Neo4jStorage
 from app.tools.db_interface.db_interface import DatabaseInterface
 from app.tools.data_transformer.data_transformer import DataTransformer
 from app.tools.utility.graph_analyser import analyse
+from app.tools.utility.markdown_generator import generate_markdown
+from app.tools.utility.markdown_generator import get_filename
 
 root_dir = "app"
 static_dir = os.path.join(root_dir, "assets")
@@ -47,6 +51,7 @@ data_transformer = DataTransformer()
 storage_graph = Neo4jStorage(**config["EXPERIMENT_STORAGE"])
 
 # Tools
+# BIG GRAPH MAKE SLOW WHY?
 design_dash = Dashboard(storage_graph,__name__, server)
 design_dash.app.enable_dev_tools(debug=True)
 
@@ -156,7 +161,11 @@ def graph_admin():
 @server.route("/graph_metrics", methods=["GET", "POST"])
 @login_required
 def graph_metrics():
-    return render_template("graph_metrics.html",is_admin=current_user.is_admin)
+    data = analyse(storage_graph)
+    generate_markdown(data)
+    return render_template("graph_metrics.html",
+                           is_admin=current_user.is_admin,
+                           metric_data=data)
 
 
 @server.route("/visualiser", methods=["GET", "POST"])
@@ -164,6 +173,11 @@ def graph_metrics():
 def visualiser():
     return redirect(design_dash.pathname)
 
+
+@server.route("/download_report", methods=["POST"])
+def download_report():    
+    filename = get_filename()
+    return send_file(filename, as_attachment=True)
 
 @server.before_request
 def before_request_func():

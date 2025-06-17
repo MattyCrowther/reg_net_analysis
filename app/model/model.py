@@ -71,7 +71,12 @@ class ModelGraph:
                 
         else:
             raise ValueError(equivalent)
-    
+
+    def get_interaction_direction(self,pred):
+        cls_code = self._get_class_code(pred)
+        return self.search((cls_code,self.identifiers.predicates.direction,None),
+                           lazy=True)[1][1]["key"]
+     
     def get_classes(self):
         return [r[0][1]["key"] for r in 
                 self.search((None,None,OWL.Class)) 

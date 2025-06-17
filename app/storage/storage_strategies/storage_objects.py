@@ -38,6 +38,13 @@ class StorageObject():
             self._relationships[key] = []
         self._relationships[key].append(obj)
 
+    def remove_relationship(self,key,obj):
+        if isinstance(obj,StorageObject):
+            obj = obj.identifier
+        if key not in self._relationships:
+            raise ValueError(f'{key} not relationship in {self._identifier}')
+        self._relationships[key].remove(obj)
+
     def __eq__(self, value):
         if not isinstance(value,StorageObject):
             return False

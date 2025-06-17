@@ -259,6 +259,16 @@ class QueryBuilder:
     def node_labels(self):
         return """CALL db.labels() YIELD label RETURN label"""
     
+    def export(self):
+        return f'''
+        MATCH (n1)
+        OPTIONAL MATCH (n1)-[e]->()
+        WITH collect(DISTINCT n1) AS a, collect(DISTINCT e) AS b
+        CALL apoc.export.json.data(a, b, null, {{stream: true}})
+        YIELD data
+        RETURN data
+        '''
+    
 def is_url(string):
     try:
         result = urlparse(string)

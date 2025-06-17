@@ -28,9 +28,6 @@ class DataTransformer():
     def __init__(self):
         pass
 
-    def does_exist(self, record):
-        pass
-    
     def generate_identifier(self,record):
         new_id = f'{model.identifiers.namespaces.nv}{uuid.uuid4()}'
         record.add_synonym(record.id)
@@ -64,6 +61,32 @@ class DataTransformer():
                             rels[i] = replacement_map[rel]
         return records
 
+    def canonicalise(self,records,replacement_map):
+        # Its not as easy as i thought. For example, even if stuff does have say the same sequence, it could be the case that they are in different regions...............
+        # Needs mas thought. However, intra dataset canonicalisation should happen as source where you have more control over the data....
+        # Also, need to think about context vs source idependant.
+        return records
+        # Replacement map (old:new)
+        for record in records:
+            if isinstance(record,PhysicalEntity):
+                res = self._find_pe_canonical(record,records)
+            elif isinstance(record,ConceptualEntity):
+                pass
+            else:
+                raise ValueError(type(record))
+
+        
+    def _find_pe_canonical(self,record,records):
+        record_sequence = record.sequence
+        for o_record in records:
+            if not isinstance(o_record,PhysicalEntity):
+                continue
+            if o_record == record:
+                continue
+            if record_sequence is not None:
+                if record_sequence != o_record.sequence:
+                    continue
+            
     def transform_data(self,records):
         graphs = []
         for record in records:
@@ -104,34 +127,47 @@ class DataTransformer():
         return RDFGraphWrapper(graph)
     
 
-    def retrieve_transformed_data(self,max=None):
+    def retrieve_transformed_data(self, max=None):
         graphs = {}
-        count = 0
+        visited = set()
+
+        ttl_files = [f for f in os.listdir(storage_dir) if f.endswith(".ttl")]
+        num_files = len(ttl_files)
 
         def _load_graph(fn):
-            nonlocal graphs
-            nonlocal count
-            if fn in graphs:
+            canonical_name = os.path.basename(fn)
+            print(f'Seen {len(visited)}/{num_files} records ({(len(visited)/num_files) * 100:.2f}% )')
+            if canonical_name in visited:
                 return
+            visited.add(canonical_name)
+
+            path = os.path.join(storage_dir, fn)
+            if not os.path.isfile(path):
+                return
+
             g = Graph()
-            g.parse(os.path.join(storage_dir,fn))
+            g.parse(path)
             g = RDFGraphWrapper(g)
-            graphs[fn] = g
-            
-            for s,p,o in g.search((None,None,None)):
-                fn = self._find_file(self._get_name(o) + ".ttl")
-                if fn is not None:
-                    _load_graph(fn)
-                    count += 1
-            count += 1
-                    
-        for file in os.listdir(storage_dir):
-            if file.endswith(".ttl"):
+            graphs[canonical_name] = g
+
+            if max is not None:
+                for s, p, o in g.search((None, None, None)):
+                    if isinstance(o, URIRef):
+                        linked_fn = self._find_file(self._get_name(o) + ".ttl")
+                        if linked_fn:
+                            _load_graph(linked_fn.name)
+
+            if max is not None and len(graphs) >= max:
+                return
+
+        for file in ttl_files:
+            if file not in visited:
                 _load_graph(file)
-            if max is not None and count >= max:
-                return list(graphs.values())
-            
+            if max is not None and len(graphs) >= max:
+                break
+
         return list(graphs.values())
+
 
 
 

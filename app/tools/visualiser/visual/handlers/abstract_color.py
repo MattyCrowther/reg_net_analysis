@@ -8,14 +8,13 @@ class NodeColorHandler(HandlerABC):
         self._builder = self.default_builder()
 
     def default_builder(self):
-        return self.standard
+        return self.type
 
     def standard(self, elements,stylesheet=None):
         stylesheet = self._remove_old_selectors(stylesheet)
         standard_key = self._build_selector("standard")
         new_style = {"background-color": color_picker[0]}
         stylesheet = self._add_to_stylesheet(stylesheet, standard_key, new_style)
-
         for element in elements:
             if not self._is_node(element):
                 continue
@@ -31,8 +30,8 @@ class NodeColorHandler(HandlerABC):
         for element in elements:
             if not self._is_node(element):
                 continue
-            node = cur_view.get_element(element["data"]["id"])
-            node_type = node.object_type
+            node = cur_view.get_node(element["data"]["id"])
+            node_type = self._get_name(node.type)
             if node_type is not None:
                 selector = self._build_selector(node_type)
             else:
@@ -64,13 +63,13 @@ class EdgeColorHandler(HandlerABC):
         self._builder = self.default_builder()
 
     def default_builder(self):
-        return self.standard
+        return self.type
     
     def standard(self, elements,stylesheet=None):
         stylesheet = self._remove_old_selectors(stylesheet)
         standard_key = self._build_selector("standard")
-        new_style = {"line-color": color_picker[4],
-                     "mid-target-arrow-color" : color_picker[6]}
+        new_style = {"line-color": color_picker[0],
+                     "mid-target-arrow-color" : color_picker[0]}
         stylesheet = self._add_to_stylesheet(stylesheet,
                                             standard_key,
                                             new_style)
@@ -92,11 +91,12 @@ class EdgeColorHandler(HandlerABC):
                 continue
             source = element["data"]["source"]
             target = element["data"]["target"]
-            edge_type = cur_view.get_relationship(source,target)
+            edge_type = cur_view.get_edge_type(source,target)
             
             if edge_type is None:
                 selector = no_type_key
             else:
+                edge_type = self._get_name(edge_type)
                 edge_type = edge_type
                 selector = self._build_selector(edge_type)
             if selector not in colour_map:

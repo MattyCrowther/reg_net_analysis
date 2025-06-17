@@ -157,7 +157,6 @@ class CommunityDetection:
         '''
         name = _normalise_gn(name)
         qry = self._qry_builder.louvain(name)
-        print(qry)
         return self._driver.run_cypher(qry)
 
 
@@ -248,7 +247,6 @@ class Similarity:
         https://neo4j.com/docs/graph-data-science/current/algorithms/node-similarity/
         '''
         name = _normalise_gn(name)
-        print("AQUI")
         qry = self._qry_builder.node_similarity(name)
         return self._driver.run_cypher(qry)
 

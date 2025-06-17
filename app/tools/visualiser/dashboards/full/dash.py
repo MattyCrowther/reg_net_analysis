@@ -88,88 +88,14 @@ class Dashboard(AbstractDash):
         if triggered_id is None:
             raise PreventUpdate
         
-        if node_data is not None and triggered_id == graph_name:
-            node_id = node_data["id"]
-            ve = args[-1]
-            if not self.visualiser.is_expanded(node_id):
-                node_data,ve = self.visualiser.expand_node(node_id,ve)
-                node_data = node_data.to_dict()
-                node_type = node_data.pop("object_type")
-                card_heading_str = node_type.value
-                if "adapter_id" in node_data:
-                    object_type = node_data.pop("adapter_id")
-                    card_heading_str += f' ({object_type})'
-                elif "type" in node_data:
-                    object_type = node_data.pop("type")
-                    card_heading_str += f' ({object_type})'
-                
-                card_body = self.create_heading_5("nd_heading",node_id, 
-                                                className="card-title")
-                card_body += self.create_heading_6("nd_heading",card_heading_str, 
-                                                className="card-title")
-                
-                card_body += self.create_horizontal_row()
-                if node_type == EntityType.EQUIPMENT_TYPE:
-                    institute = "unknown"
-                    if "institute" in node_data:
-                        institute = node_data.pop("institute")
-                    card_body += self.create_paragraph(f'Institute: {institute}')
-
-                elif node_type == EntityType.EXPERIMENT_TYPE:
-                    institute = "unknown"
-                    if "institute" in node_data:
-                        institute = node_data.pop("institute")
-                    card_body += self.create_paragraph(f'Institute: {institute}')
-                    if "end_data" in node_data:
-                        # Not sure how end_data will go.
-                        node_data.pop("end_data")
-                        is_running = False
-                    else:
-                        is_running = True
-                    card_body += self.create_paragraph(f'Active: {is_running}')
-                    # measurements - Not handled this yet bc dont how to present it.
-
-                elif node_type == EntityType.ERROR_TYPE:
-                    severity = "unknown"
-                    if "severity" in node_data:
-                        severity = node_data.pop("severity")
-
-                    description = "unknown"
-                    if "description" in node_data:
-                        description = node_data.pop("description")
-
-                    timestamp = "unknown"
-                    if "timestamp" in node_data:
-                        timestamp = node_data.pop("timestamp")
-
-                    card_body += self.create_paragraph(f'severity: {severity}')
-                    card_body += self.create_paragraph(f'description: {description}')
-                    card_body += self.create_paragraph(f'Time: {timestamp}')
-
-
-                if len(node_data) > 0:
-                    card_body += self.create_heading_6("metadata_heading","Metadata")
-                for key,value in node_data.items():
-                    card_body += self.create_paragraph(f'{key}: {value}')
-
-                card_style = {
-                    "className": "shadow-lg p-3 mb-5 bg-white rounded"}
-                card = self.create_card(card_body,id="node_details_card",
-                                        card_body_id="node_details_card_body",**card_style)
-                
-                return card,ve,self.visualiser.get_style()
-            else:
-                node_id = node_data["id"]
-                ve = args[-1]
-                ve = self.visualiser.compress_node(node_id,ve)
-                return [],ve,self.visualiser.get_style()
-        elif triggered_id == graph_name:
+        if triggered_id == graph_name:
             raise PreventUpdate
         else:
             elements = args[-1]
             values = args[:-1]
 
-            builder_value = [v for v in values if triggered_id in v]
+            builder_value = [v for v in values 
+                             if triggered_id in v]
             assert(len(builder_value) == 1)
             builder_value = builder_value[0].split()[1]
             ve = self.visualiser.get_visual_element(elements,
@@ -193,7 +119,7 @@ class Dashboard(AbstractDash):
             if input_id != "tabs":
                 action = "download"
         else:
-            raise PreventUpdate()
+            raise PreventUpdate
         return [{'type': input_id, 'action': action}]
     
     def _create_graph_options(self,callback_manager):

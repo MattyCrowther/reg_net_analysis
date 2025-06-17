@@ -22,8 +22,8 @@ class NodeShapeHandler(HandlerABC):
             # Its an edge
             if not self._is_node(element):
                 continue
-            node = cur_view.get_element(element["data"]["id"])
-            node_type = node.object_type
+            node = cur_view.get_node(element["data"]["id"])
+            node_type = self._get_name(node.type)
             if node_type is None:
                 node_type = no_type_key
             else:

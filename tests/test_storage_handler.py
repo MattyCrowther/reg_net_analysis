@@ -27,8 +27,10 @@ class TestStorageInterface(unittest.TestCase):
         #ce = transformer.replace_identifiers(ce,replacement_map)
         #pe = transformer.replace_references(pe,replacement_map)
         #ce = transformer.replace_references(ce,replacement_map)
+
+        #entities = transformer.canonicalise(pe + ce)
         
-        num_elements = 1
+        num_elements = None
         # GOAL: Get retrived transformed data to retrive a COMPLETE subset if given.
         graphs = transformer.retrieve_transformed_data(num_elements)
         for graph in graphs:
@@ -37,4 +39,21 @@ class TestStorageInterface(unittest.TestCase):
         count = len(interface.get())
         self.assertEqual(len(graphs),count)
         
+
+
+    def test_export_load(self):
+        interface = StorageHandler("neo4j",TEST_NEO4J_URI,
+                                   TEST_NEO4J_USER,
+                                   TEST_NEO4J_PASSWORD)
+        
+        out_fn = "temp.json"
+        pre_data = interface.get()
+
+        interface.export(out_fn)
+        interface.load(out_fn)
+
+        post_data = interface.get()
+
+        os.remove(out_fn)
+        self.assertCountEqual(pre_data,post_data)
 

@@ -29,10 +29,8 @@ class NodeLabelHandler(HandlerABC):
             # Its an edge
             if not self._is_node(element):
                 continue
-            node = cur_view.get_element(element["data"]["id"])
-            count = 0
-            for rels in node.relationships.values():
-                count += len(rels)
+            node = cur_view.get_node(element["data"]["id"])
+            count = len(list(cur_view.edges(node)))
             element["data"]["label"] = f"{str(count)}"
         return elements
 
@@ -42,8 +40,8 @@ class NodeLabelHandler(HandlerABC):
             # Its an edge
             if not self._is_node(element):
                 continue
-            node = cur_view.get_element(element["data"]["id"])
-            n_type = node.object_type
+            node = cur_view.get_node(element["data"]["id"])
+            n_type = node.type
             if n_type is None:
                 class_type = "unknown"
             else:
@@ -80,7 +78,7 @@ class EdgeLabelHandler(HandlerABC):
                 continue
             source = element["data"]["source"]
             target = element["data"]["target"]
-            edge_type = cur_view.get_relationship(source,target)
+            edge_type = cur_view.get_edge_type(source,target)
             if edge_type is None:
                 rel_type = "unknown"
             else:

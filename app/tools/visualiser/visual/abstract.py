@@ -82,9 +82,8 @@ class Visual:
     def set_view(self,view_builder=None):
         return self._builder.set_view(view_builder=view_builder)
     
-    def get_view_elements(self,sub_view=None,initial_edge_index=0):
-        return self._builder.get_view_elements(sub_view=sub_view,
-                                               initial_edge_index=initial_edge_index)
+    def get_view_elements(self,sub_view=None):
+        return self._builder.get_view_elements(sub_view=sub_view)
     
     # -- Layout --
     def get_layout_options(self):

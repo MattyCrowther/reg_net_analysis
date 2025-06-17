@@ -1,23 +1,65 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid px-4">
   <div class="row min-vh-100">
-    
-    <div class="col-md-3 col-lg-2 bg-dark text-white shadow d-flex flex-column">
-        <h2 class="mb-4">Graph Metrics</h2>
-      </div>
 
-    <!-- Main Content Area -->
-    <div class="col-12 col-md-9 col-lg-10 py-4 px-5">
-      <form method="post" action="">
-        <div class="row">
-          <div class="col-md-4 mb-4">
-            <p>HEY</p>
-          </div>
-        </div>
-      </form>
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 bg-dark text-white shadow p-4">
+      <h2 class="mb-4">Graph Statistics</h2>
+      <p>This page provides both network-based metrics and semantic metrics on the current data stored in the underlying network.</p>
     </div>
 
+    <!-- Main Content Area -->
+    <div class="col-md-9 col-lg-10 bg-light p-4">
+      {% if metric_data %}
+        <h1 class="mb-4">Network Analysis Report</h1>
+        <form method="post" action="{{ url_for('download_report') }}" class="my-3">
+          <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+            <i class="bi bi-download me-2"></i>Download Report
+          </button>
+        </form>
+
+        <!-- Accordion Start -->
+        <div class="accordion" id="metricsAccordion">
+
+          <!-- Graph Metrics Section -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="graphHeading">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#graphMetrics" aria-expanded="true">
+                Graph Metrics
+              </button>
+            </h2>
+            <div id="graphMetrics" class="accordion-collapse collapse show" data-bs-parent="#metricsAccordion">
+              <div class="accordion-body">
+                <p>{{ metric_data["graph"]["description"] }}</p>
+                {% set section = 'graph' %}
+                {% include 'partials/metrics_block.html' %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Semantic Metrics Section -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="semanticHeading">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#semanticMetrics" aria-expanded="false">
+                Semantic Metrics
+              </button>
+            </h2>
+            <div id="semanticMetrics" class="accordion-collapse collapse" data-bs-parent="#metricsAccordion">
+              <div class="accordion-body">
+                {% if "semantic" in metric_data %}
+                <p>{{ metric_data["semantic"]["description"] }}</p>
+                {% set section = 'semantic' %}
+                {% include 'partials/metrics_block.html' %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- Accordion End -->
+      {% endif %}
+    </div>
   </div>
 </div>
 {% endblock %}

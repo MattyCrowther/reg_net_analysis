@@ -27,36 +27,34 @@ class Builder:
         self.view = self._view_builder.build()
 
 
-    def get_view_elements(self,sub_view=None,initial_edge_index=0):
-        edge_index = initial_edge_index
+    def get_view_elements(self,sub_view=None):
         if sub_view is None:
             sub_view = self.view
         
         nodes = []
         edges = []
-        for element in sub_view:
-            node = self._build_node(element)
+        for node in sub_view.nodes():
+            node = self._build_node(node)
             nodes.append(node)
-            for _,rels in element.relationships.items():
-                for rel in rels:
-                    if sub_view.get_element(rel) is None:
-                        continue
-                    edge = self._build_edge(element.identifier,
-                                            rel,edge_index)
-                    edge_index += 1
-                    edges.append(edge)
+        
+        for edge in sub_view.edges():
+            edge = self._build_edge(edge)
+            edges.append(edge)
+
         return nodes+edges
 
-    def _build_node(self, element):
+    def _build_node(self, node):
         class_str = f'top-center'
-        node = {'data': {'id': str(element.identifier)},
+        node = {'data': {'id': str(node.id)},
                 'classes': class_str}
         return node
 
-    def _build_edge(self, n,v,e):
-        edge = {'data': {'source': str(n), 
-                         'target': str(v),
-                         "id" : str(e)},
+    def _build_edge(self, edge):
+        if edge.n == edge.v:
+            raise ValueError(edge)
+        edge = {'data': {'source': str(edge.n), 
+                         'target': str(edge.v),
+                         "id" : f'{str(edge.id)}'},
                 'classes': f'center-right'}
         return edge
 

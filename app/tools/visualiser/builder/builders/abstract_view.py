@@ -1,9 +1,15 @@
-import networkx as nx
-from app.tools.visualiser.view.view import View
-
+from app.tools.visualiser.view.edge import Edge
+from app.tools.visualiser.view.node import Node
 class AbstractViewBuilder():
     def __init__(self,storage):
         self._storage = storage
 
-    def _new_view(self, entities):
-        return View(entities)
+
+    def _node_coversion(self,node):
+        conv_node = Node(node.identifier,
+                         node.object_type,
+                         **node.properties)
+        return conv_node
+    
+    def _edge_conversion(self,n,v,e,**kwargs):
+        return Edge(n,v,e,**kwargs)

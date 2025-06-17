@@ -28,30 +28,3 @@ class NetVisVisual(Visual):
                          size_handler=NetVisSizeHandler(builder),
                          node_shape_handler=NetVisNodeShapeHandler(builder),
                          edge_shape_handler=NetVisEdgeShapeHandler(builder))
-    
-    def expand_node(self,node_id,elements):
-        node_data = self._builder.expand_node(node_id)
-        if len(node_data) > 1:
-            new_elements = self.get_view_elements(node_data,len(elements))
-            existing_ids = [e["data"]["id"] for e in elements]
-            for element in new_elements:
-                if element["data"]["id"] in existing_ids:
-                    continue
-                elements.append(element)
-            elements = self.get_visual_element(elements)
-        return node_data[0],elements
-    
-
-    def compress_node(self, node_id, elements):
-        removed_elements = self._builder.compress_node(node_id)
-        new_elements = []
-        for e in elements:
-            if e["data"]["id"] in removed_elements:
-                continue
-            if "source" in e["data"] and node_id == e["data"]["source"]:
-                continue
-            new_elements.append(e) 
-        return new_elements
-
-    def is_expanded(self,node_id):
-        return self._builder.is_expanded(node_id)

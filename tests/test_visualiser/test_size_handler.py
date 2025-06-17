@@ -42,8 +42,8 @@ class TestLabelHandler(unittest.TestCase):
             if not self.visualiser._size_handler._is_node(e):
                 continue
             n_id = e["data"]["id"]
-            node = self.visualiser._builder.view.get_element(n_id)
-            node_type = node.object_type
+            node = self.visualiser._builder.view.get_node(n_id)
+            node_type = node.type
             if node_type is None:
                 self.assertEqual(e["data"]["size"],self._standard_size/2)
             else:

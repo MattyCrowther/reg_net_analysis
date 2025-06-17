@@ -3,6 +3,7 @@ from app.storage.storage_strategies.abstract_storage import AbstractStorage
 from app.storage.storage_strategies.storage_objects import StorageObject
 from app.storage.storage_strategies.neo4j.project import ProjectBuilder
 from app.storage.storage_strategies.neo4j.procedures import Procedures
+import json
 
 class Neo4jStorage(AbstractStorage):
     def __init__(self, uri, username=None,password=None):
@@ -40,13 +41,19 @@ class Neo4jStorage(AbstractStorage):
 
     def add_entity(self, label, identifier, relationships, properties):
         self._interface.add_node(label,identifier,properties) 
+        print(relationships)
         for rel_key, objs in relationships.items():
             for linked_obj in objs:
                 self._interface.add_relationship(identifier,linked_obj,rel_key)
     
     def add_relationship(self,entity1, entity2, relationship_type):
-        self._interface.add_relationship(entity1.identifier,
-                                         entity2.identifier,
+        if isinstance(entity1,StorageObject):
+            entity1 = entity1.identifier
+        if isinstance(entity2,StorageObject):
+            entity2 = entity2.identifier
+        print(relationship_type,type(relationship_type))
+        self._interface.add_relationship(entity1,
+                                         entity2,
                                          relationship_type.value)
 
     def update_entity(self,identifier,type,
@@ -117,7 +124,27 @@ class Neo4jStorage(AbstractStorage):
         if total == 0:
             return 0.0
         return (2 * bidirectional) / total
+    
+    def export(self):
+        return json.dumps(self._interface.export())
 
+    def load(self,fn):
+        if not fn.endswith(".json"):
+            raise ValueError("Load must be provided with json.")
+        
+        with open(fn) as f:
+            data = json.load(f)
+        self._interface.drop()
+        for d in data:
+            if d["type"] == "relationship":
+                self._interface.add_relationship(d["start"]["properties"]["identifier"],
+                                                 d["end"]["properties"]["identifier"],
+                                                 d["label"])
+            elif d["type"] == "node":
+                self._interface.add_node(d["labels"][0],d["id"],d["properties"])
+            else:
+                raise ValueError(f'{d["type"]} isnt known.')
+            
     def _create_object(self,node,rels=None):
         # Its an integration thing. When rel adds node before node data
         if len(node.labels) == 0:
