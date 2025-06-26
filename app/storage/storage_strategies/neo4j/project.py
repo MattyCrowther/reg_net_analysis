@@ -31,3 +31,15 @@ class ProjectBuilder():
             return self._graph.project.get_graph(gn)
         except ValueError:
             return self._graph.project.project(gn,nodes,edges)[0]
+        
+    def sub_graph(self, graph_name, node_ids=None, 
+                  node_labels=None, edge_labels=None, directed=True):
+        return self._graph.project.cypher(
+            graph_name,
+            node_ids=node_ids,
+            node_labels=node_labels,
+            edge_labels=edge_labels,
+            directed=directed
+        )
+
+

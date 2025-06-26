@@ -2,8 +2,7 @@ import os
 import shutil
 import json
 import yaml
-import io
-
+from datetime import datetime
 from flask import Flask
 from flask import session
 from flask import render_template
@@ -19,7 +18,8 @@ from flask_login import login_required
 
 from app.utility import forms
 from app.utility.login import LoginHandler
-from app.tools.visualiser.dashboards.full.dash import Dashboard 
+from app.tools.visualiser.dashboards.full.dash import ViewDashboard 
+from app.tools.visualiser.dashboards.explore.dash import ExploreDashboard 
 from app.storage.storage_strategies.neo4j.storage import Neo4jStorage
 from app.tools.db_interface.db_interface import DatabaseInterface
 from app.tools.data_transformer.data_transformer import DataTransformer
@@ -31,14 +31,18 @@ root_dir = "app"
 static_dir = os.path.join(root_dir, "assets")
 template_dir = os.path.join(root_dir, "templates")
 sessions_dir = os.path.join(root_dir, "sessions")
+graph_store = os.path.join(sessions_dir,"graph_backup")
 
 if not os.path.isdir(sessions_dir):
     os.mkdir(sessions_dir)
+if not os.path.isdir(graph_store):
+    os.mkdir(graph_store)
 
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
 server = Flask(__name__, static_folder=static_dir, template_folder=template_dir)
+server.debug = True
 
 db_host = os.environ.get("NEO4J_HOST", "localhost")
 db_auth = os.environ.get("NEO4J_AUTH", "neo4j/Radeon12300")
@@ -48,17 +52,20 @@ login_graph_name = "login_manager"
 db_interface = DatabaseInterface()
 data_transformer = DataTransformer()
 # Constrict to n4j for now.
-storage_graph = Neo4jStorage(**config["EXPERIMENT_STORAGE"])
+storage_graph = Neo4jStorage(**config["STORAGE"])
 
 # Tools
-# BIG GRAPH MAKE SLOW WHY?
-design_dash = Dashboard(storage_graph,__name__, server)
-design_dash.app.enable_dev_tools(debug=True)
+view_dash = ViewDashboard(storage_graph,__name__, server)
+view_dash.app.enable_dev_tools(debug=True)
+
+explore_dash = ExploreDashboard(storage_graph,__name__, server)
+explore_dash.app.enable_dev_tools(debug=True)
 
 app = DispatcherMiddleware(
     server,
     {
-        design_dash.pathname: design_dash.app.server,
+        view_dash.pathname: view_dash.app.server,
+        explore_dash.pathname: explore_dash.app.server,
     },
 )
 
@@ -139,23 +146,29 @@ def graph_admin():
     if not _is_admin():
         return render_template("invalid_route.html", invalid_credentials=True)
     
-
-
-    rebuild_graph_form = forms.RebuildGraph()
-    if rebuild_graph_form.validate_on_submit():
-        storage_graph.drop()
-        if rebuild_graph_form.download_data.data:
-            graphs = prepare_graphs(refresh=True)
-        elif rebuild_graph_form.rebuild_rdf.data:
-            graphs = prepare_graphs(refresh=False)
-        else:
-            graphs = data_transformer.retrieve_transformed_data()
-
+    save_restore_graph = forms.save_restore_graph(graph_store)
+    if save_restore_graph.reset.id in request.form.keys():
+        graphs = prepare_graphs(refresh=True)
         for graph in graphs:
             storage_graph.add_rdf_graph(graph)
-            
+    elif save_restore_graph.rebuild.id in request.form.keys():
+        graphs = prepare_graphs(refresh=False)
+        for graph in graphs:
+            storage_graph.add_rdf_graph(graph)
+    elif save_restore_graph.save.id in request.form.keys():
+        filename = save_restore_graph.filename.data
+        if filename == "" or filename is None:
+            now = datetime.now()
+            filename = now.strftime("%Y%m%d-%H%M")
+        filename = os.path.join(graph_store,filename+".json")
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(storage_graph.export())
+    elif save_restore_graph.restore.id in request.form.keys():
+        fn = os.path.join(graph_store, request.form["files"])
+        storage_graph.load(fn)
+
     return render_template("admin.html", is_admin=current_user.is_admin,
-                           rebuild_graph_form=rebuild_graph_form)
+                           save_restore_graph=save_restore_graph)
 
 
 @server.route("/graph_metrics", methods=["GET", "POST"])
@@ -171,8 +184,15 @@ def graph_metrics():
 @server.route("/visualiser", methods=["GET", "POST"])
 @login_required
 def visualiser():
-    return redirect(design_dash.pathname)
-
+    return redirect(view_dash.pathname)
+    
+@server.route("/explore", methods=["GET", "POST"])
+@login_required
+def explore():
+    node_id = request.form.get("node_id")
+    if node_id is not None:
+        session["node_id"] = node_id
+    return redirect(explore_dash.pathname)
 
 @server.route("/download_report", methods=["POST"])
 def download_report():    

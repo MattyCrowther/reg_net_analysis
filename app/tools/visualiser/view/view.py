@@ -80,23 +80,15 @@ class View:
             v = self._node(o_type,id=v,properties=props)
             yield self._edge(n,v,e,properties=d)
 
-    def out_edges(self, node=None):
-        for n,v,e,d in self._graph.out_edges(node,keys=True,data=True):
-            props = self._graph.nodes[n].copy()
-            o_type = props["key"]
-            del props["key"]
-            n = self._node(o_type,id=n,properties=props)
-
-            props = self._graph.nodes[v].copy()
-            o_type = props["key"]
-            del props["key"]
-            v = self._node(o_type,id=v,properties=props)
-            yield self._edge(n,v,e,properties=d)
-
     def has_edge(self,edge):
         return self._graph.has_edge(edge.n,
                                     edge.v,
                                     key=edge.type)
+    
+    def has_node(self,node):
+        if isinstance(node,Node):
+            node = node.id
+        return self._graph.has_node(node)
     
     def add_edge(self, edge):
         self._graph.add_edge(edge.n,
@@ -108,8 +100,10 @@ class View:
         self._graph.add_node(node.id,
                              type=node.type,
                              **node.properties)
+        
+    def remove_node(self,node):
+        self._graph.remove_node(node.id)
 
-
-
-
-            
+    def get_isolated_nodes(self):
+        isolated_nodes = list(nx.isolates(self._graph))
+        return [self.get_node(n) for n in isolated_nodes]

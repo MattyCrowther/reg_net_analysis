@@ -362,3 +362,7 @@ class Procedures():
     def node_stream(self,name):
         qry = self._builder.node_stream(name)
         return self._interface.run_cypher(qry)
+    
+    def node_2_vec(self,name,mode="stream"):
+        qry = self._builder.node_2_vec(name,mode=mode)
+        return self._interface.run_cypher(qry)

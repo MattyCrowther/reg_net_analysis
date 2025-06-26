@@ -101,33 +101,58 @@ class GDSQueryBuilder:
     def __init__(self):
         pass
         
-    def cypher_project(self,name,node_labels=None,edge_labels=None,node_properties=None):
-        def _handle_labels(labels):
-            if labels is None:
-                return ""
-            return ":" + ":".join([f'`{l}`' for l in labels])
-        node_label_str = _handle_labels(node_labels)
-        edge_label_str = _handle_labels(edge_labels)
-        where_str = ""
-        if node_properties is not None:
-            for index,(k,v) in enumerate(node_properties.items()):
-                if isinstance(v,str) and v not in self._matches.keys():
-                    v = f'"{v}"'
-                where_str += f'source.{k} = {v} '
-                where_str += " AND "
-                where_str += f'target.{k} = {v} '
-                if index < len(node_properties) - 1:
-                    where_str += "AND"
-        if len(where_str) > 0 :
-            where_str = f"WHERE {where_str}"
 
-        return f"""MATCH (source{node_label_str})-[r{edge_label_str}]->(target{node_label_str})
-        {where_str}
-        WITH gds.graph.project(
-        '{name}',
-        source,
-        target) as g
-        RETURN g.graphName AS graph, g.nodeCount AS nodes, g.relationshipCount AS rels"""
+    def cypher_project(self, node_ids=None, node_labels=None, edge_labels=None, directed=True):
+        # Node filter setup
+        node_filters = []
+
+        if node_ids:
+            if isinstance(node_ids, str):
+                node_ids = [node_ids]
+            id_list = "[" + ", ".join(f'"{nid}"' for nid in node_ids) + "]"
+            node_filters.append(f"n.identifier IN {id_list}")
+
+        if node_labels:
+            if isinstance(node_labels, str):
+                node_labels = [node_labels]
+            label_filter = " OR ".join(f'"{label}" IN labels(n)' for label in node_labels)
+            node_filters.append(f"({label_filter})")
+
+        node_where = " AND ".join(node_filters)
+        if node_where:
+            node_where = " AND " + node_where
+
+        # Relationship filter
+        if edge_labels:
+            if isinstance(edge_labels, str):
+                edge_labels = [edge_labels]
+            rel_list = "[" + ", ".join(f'"{t}"' for t in edge_labels) + "]"
+            edge_filter = f"type(r) IN {rel_list}"
+        else:
+            edge_filter = None
+
+        rel_arrow = "->" if directed else "-"
+
+        # Final node and rel queries
+        node_query = f"""
+        MATCH (n)
+        WHERE (
+            EXISTS {{
+                MATCH (n)-[r]{rel_arrow}() {f"WHERE {edge_filter}" if edge_filter else ""}
+            }} OR EXISTS {{
+                MATCH ()-[r]{rel_arrow}(n) {f"WHERE {edge_filter}" if edge_filter else ""}
+            }}
+        ){node_where}
+        RETURN id(n) AS id
+        """
+
+        rel_query = f"""
+        MATCH (a)-[r]{rel_arrow}(b)
+        {f"WHERE {edge_filter}" if edge_filter else ""}
+        RETURN id(a) AS source, id(b) AS target, type(r) AS type
+        """
+
+        return node_query.strip(), rel_query.strip()
 
     def mutate(self,name,types,mutate_type,node_labels=None):
         sb = StringBuilder()
@@ -204,6 +229,21 @@ class GDSQueryBuilder:
         sb.YIELD(["nodeId","score"])
         sb.RETURN(["gds.util.asNode(nodeId) AS node", "score"])
         return sb.BUILD()
+
+    def node_2_vec(self,name,mode="write",**kwargs):
+        sb = StringBuilder()
+        sb.CALL("gds.node2vec",name,mode)
+        for k,v in kwargs.items():
+            sb.PARAMETER(k,v)
+        if mode == "stream":
+             sb.YIELD(["nodeId,embedding"])
+        elif mode == "write":
+            if "writeProperty" not in kwargs: 
+                sb.PARAMETER("writeProperty",
+                             'embedding')
+            sb.YIELD(["nodeCount"])
+        return sb.BUILD()
+    
 
     def harmonic_centrality(self,name,mode="stream"):
         sb = StringBuilder()
@@ -455,3 +495,4 @@ class GDSQueryBuilder:
         )
         YIELD graphName, fromGraphName, nodeCount, relationshipCount
         '''
+    

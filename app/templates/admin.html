@@ -1,37 +1,61 @@
-{% extends "base.html" %} {% block content %}
-<div class="row">
-    <div class="col" align="center">
-        <h1>Admin Panel</h1>
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid px-4">
+  <div class="row min-vh-100">
+
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 bg-dark text-white shadow p-4">
+      <h2 class="mb-4">Admin Panel</h2>
+      <p>Manage your graph snapshots, rebuild RDF, reset or restore your data.</p>
     </div>
-</div>
-{% if rebuild_graph_form %}
-<div class="row gy-5">
-    <div class="col">
-        <div class="card">
-            <div class="card-header">
-                <h2>Rebuild Graph</h2>
+
+    <!-- Main Content Area -->
+    <div class="col-md-9 col-lg-10 bg-light p-4">
+      <h1 class="mb-4">Graph Administration</h1>
+
+      {% if save_restore_graph %}
+      <div class="accordion" id="adminAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="adminHeading">
+            <button class="accordion-button" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#adminActions"
+                    aria-expanded="true"
+                    aria-controls="adminActions">
+              Graph Actions
+            </button>
+          </h2>
+          <div id="adminActions"
+               class="accordion-collapse collapse show"
+               data-bs-parent="#adminAccordion">
+            <div class="accordion-body">
+              <form method="post" enctype="multipart/form-data">
+                {{ save_restore_graph.hidden_tag() }}
+
+                <div class="mb-3">
+                  {{ save_restore_graph.files.label(class="form-label") }}
+                  {{ save_restore_graph.files(class="form-select") }}
+                </div>
+
+                <div class="mb-3">
+                  {{ save_restore_graph.filename.label(class="form-label") }}
+                  {{ save_restore_graph.filename(class="form-control") }}
+                </div>
+
+                <div class="btn-toolbar">
+                  {{ save_restore_graph.reset(class="btn btn-outline-secondary me-2") }}
+                  {{ save_restore_graph.rebuild(class="btn btn-outline-primary me-2") }}
+                  {{ save_restore_graph.save(class="btn btn-success me-2") }}
+                  {{ save_restore_graph.restore(class="btn btn-danger") }}
+                </div>
+              </form>
             </div>
-            <div class="card-body">
-                <form action="" method="post" enctype="multipart/form-data">
-                    {{ rebuild_graph_form.hidden_tag() }}
-                    <div class="row gy-5">
-                        <div class="col">
-                            {{ rebuild_graph_form.download_data.label(for="download_data") }}
-                            {{ rebuild_graph_form.download_data(class="btn btn-secondary") }}
-                        </div>
-                        <div class="col">
-                            {{ rebuild_graph_form.rebuild_rdf.label(for="rebuild_rdf") }}
-                            {{ rebuild_graph_form.rebuild_rdf(class="btn btn-secondary") }}
-                        </div>
-                        <div class="col">
-                            {{ rebuild_graph_form.submit(class="btn btn-secondary") }}
-                        </div>
-                    </div>
-                </form>
-            </div>
+          </div>
         </div>
+      </div>
+      {% endif %}
+
     </div>
-    {% endif %}
-    <br>
+  </div>
 </div>
 {% endblock %}

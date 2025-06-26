@@ -22,11 +22,21 @@ class Projection():
     def get_graph(self, graph_name):
         return self._driver.graph.get(graph_name)
 
-    def cypher_project(self,name,node_labels=None,edge_labels=None,
-                       node_properties=None):
-        qry = self._qry_builder.cypher_project(name, node_labels,
-                                                edge_labels,node_properties)
-        ret = self._run(qry)
+    def cypher(self, name, node_ids=None, node_labels=None, 
+               edge_labels=None, directed=True):
+
+        try:
+            return self.get_graph(name)
+        except ValueError:
+            pass
+
+        node_qry, rel_qry = self._qry_builder.cypher_project(
+            node_ids=node_ids,
+            node_labels=node_labels,
+            edge_labels=edge_labels,
+            directed=directed
+        )
+        self._driver.graph.project.cypher(name, node_qry, rel_qry,validateRelationships = False)
         return self.get_graph(name)
         
     def sub_graph(self, o_name, n_name, nodes, edges):

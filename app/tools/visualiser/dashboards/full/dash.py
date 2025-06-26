@@ -2,14 +2,15 @@ from dash import ctx
 from dash.exceptions import PreventUpdate
 
 from app.tools.visualiser.dashboards.abstract import AbstractDash
-from app.tools.visualiser.visual.visual import NetVisVisual
+from app.tools.visualiser.visual.net_vis_view_visual import NetVisViewVisual
 from app.tools.visualiser.dashboards.full.callbacks import DashBoardCallbacks
 
 graph_name = "graph"
 graph_container_name = "graph_container"
-class Dashboard(AbstractDash):
+
+class ViewDashboard(AbstractDash):
     def __init__(self, storage, name=None, server=True):
-        super().__init__(NetVisVisual(storage), name=name, server=server,
+        super().__init__(NetVisViewVisual(storage), name=name, server=server,
                          pathname="/dashboard/")
         self._build_app()
     

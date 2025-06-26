@@ -122,7 +122,9 @@ class Procedures():
         return G
     
 
-
+    def node_2_vec(self,name,mode="stream"):
+        res = self._graph.procedure.node_2_vec(name,mode=mode)
+        return res
 
     # -- Not reworked --
     def dfs(self, name, source, dest=None, mode="stream"):

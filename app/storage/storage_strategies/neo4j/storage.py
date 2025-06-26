@@ -41,7 +41,6 @@ class Neo4jStorage(AbstractStorage):
 
     def add_entity(self, label, identifier, relationships, properties):
         self._interface.add_node(label,identifier,properties) 
-        print(relationships)
         for rel_key, objs in relationships.items():
             for linked_obj in objs:
                 self._interface.add_relationship(identifier,linked_obj,rel_key)
@@ -51,7 +50,6 @@ class Neo4jStorage(AbstractStorage):
             entity1 = entity1.identifier
         if isinstance(entity2,StorageObject):
             entity2 = entity2.identifier
-        print(relationship_type,type(relationship_type))
         self._interface.add_relationship(entity1,
                                          entity2,
                                          relationship_type.value)
@@ -92,7 +90,7 @@ class Neo4jStorage(AbstractStorage):
         return results
     
     def get_edges(self,identifier=None,
-                  edge_type=None):
+                  edge_type=None,node_type=None):
         # Mainly for case where node is taken without rels (namely GDS stuff)
         results = []
         if identifier is not None:
@@ -103,8 +101,19 @@ class Neo4jStorage(AbstractStorage):
                                                       return_nodes=True):
                 results.append((self._create_object(n),
                                 self._create_object(v),e))
+        if node_type is not None:
+            for n,e,v in self._interface.get_relationship(relationship_type=edge_type,
+                                                      return_nodes=True):
+                results.append((self._create_object(n),
+                                self._create_object(v),e))
         return results
 
+    def get_in_relationships(self,identifier):
+        results = []
+        for _,e,v in self._interface.get_in_relationships(identifier):
+            results.append((self._create_object(v),e.type))
+        return results
+        
     def node_count(self):
         return self._interface.node_count()
     
@@ -144,6 +153,10 @@ class Neo4jStorage(AbstractStorage):
                 self._interface.add_node(d["labels"][0],d["id"],d["properties"])
             else:
                 raise ValueError(f'{d["type"]} isnt known.')
+    
+
+    def get_id_map(self):
+        return {entry[1]: entry[0] for entry in self._interface.get_id_map()}
             
     def _create_object(self,node,rels=None):
         # Its an integration thing. When rel adds node before node data

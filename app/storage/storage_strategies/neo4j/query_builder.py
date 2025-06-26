@@ -204,16 +204,38 @@ class QueryBuilder:
 
         return query
 
-    def get_relationships_query(self,node_identifier):
+    def get_relationships_query(self, node_identifier=None, node_labels=None):
         match_clause = "MATCH (a)-[r]-(b)"
         conditions = []
-        conditions.append(f"a.identifier = '{node_identifier}'")
 
-        where_clause = " AND ".join(conditions) if conditions else ""
+        # Node identifier condition
+        if node_identifier:
+            conditions.append(f"a.identifier = '{node_identifier}'")
+
+        # Label conditions (match any)
+        if node_labels:
+            label_conditions = [f"'{label}' IN labels(a)" for label in node_labels]
+            conditions.append("(" + " OR ".join(label_conditions) + ")")
+
+        where_clause = " AND ".join(conditions)
+        
         query = f"{match_clause}\n"
         if where_clause:
             query += f"WHERE {where_clause}\n"
-        query += "RETURN a,r,b"
+        query += "RETURN a, r, b"
+
+        return query
+    
+    def get_in_relationships_query(self, node_identifier):
+        # Only match relationships where 'a' is the target (incoming)
+        match_clause = "MATCH (a)<-[r]-(b)"
+        conditions = [f"a.identifier = '{node_identifier}'"]
+
+        where_clause = " AND ".join(conditions)
+        query = f"{match_clause}\n"
+        if where_clause:
+            query += f"WHERE {where_clause}\n"
+        query += "RETURN a, r, b"
         return query
 
     def remove_node_query(self,identifier_key):
@@ -268,6 +290,23 @@ class QueryBuilder:
         YIELD data
         RETURN data
         '''
+    
+    def id_map(self):
+        return f'''
+        MATCH (n)
+        RETURN id(n) AS nodeId, n.identifier AS identifier
+        '''
+
+    def relationship_type(self, node_types):
+        labels_str = "[" + ", ".join(f"'{label}'" for label in node_types) + "]"
+        query = f"""
+        WITH {labels_str} AS targetLabels
+        MATCH (a)-[r]->(b)
+        WHERE any(label IN labels(a) WHERE label IN targetLabels)
+        OR any(label IN labels(b) WHERE label IN targetLabels)
+        RETURN DISTINCT type(r) AS relationshipType
+        """
+        return query
     
 def is_url(string):
     try:

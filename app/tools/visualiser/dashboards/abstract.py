@@ -360,7 +360,15 @@ class AbstractDash:
             is_open=False
         )
         return [collapsible_body]
+    
+    def create_location(self,identifier):
+        return [dcc.Location(id=identifier, refresh=False)]
 
-
-
-
+    def create_unordered_list(self, items, className=None):
+        list_items = [html.Li(str(i)) for i in items]
+        return [html.Ul(list_items, className=className)]
+    
+    def create_list(self, identifier, items, className=None):
+        list_items = [html.Li(str(i)) for i in items]
+        ul = html.Ul(id=identifier, children=list_items, className=className)
+        return [ul]

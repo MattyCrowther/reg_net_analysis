@@ -148,16 +148,27 @@ class Neo4jInterface:
             return [r[0] for r in self._run_cypher(query, params)]
         return self._run_cypher(query, params) 
     
-    def get_relationships(self,node_identifier):
-        query = self.qry_builder.get_relationships_query(node_identifier)
+    def get_relationships(self,node_identifier=None,node_labels=None):
+        query = self.qry_builder.get_relationships_query(node_identifier,
+                                                         node_labels=node_labels)
         params = {"node_identifier":node_identifier}
         return self._run_cypher(query, params)
     
+    def get_in_relationships(self,identifier):
+        query = self.qry_builder.get_in_relationships_query(identifier)
+        params = {"node_identifier":identifier}
+        return self._run_cypher(query, params)
+
     def remove(self, identifier):
         identifier_key = "identifier"
         query = self.qry_builder.remove_node_query(identifier_key)
         params = {'identifier': identifier}
         return [r[0] for r in self._run_cypher(query, params)]
+    
+    def get_relationship_types(self,node_type):
+        qry = self.qry_builder.relationship_type(node_type)
+        return [r[0] for r in self._run_cypher(qry)]
+        
 
 
     def node_count(self):
@@ -205,3 +216,8 @@ class Neo4jInterface:
                 print(f"Failed to parse line:\n{line[:100]}")
                 print(f"Error: {e}")
         return parsed
+    
+
+    def get_id_map(self):
+        qry = self.qry_builder.id_map()
+        return self._run_cypher(qry)

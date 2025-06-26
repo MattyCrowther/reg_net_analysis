@@ -5,8 +5,8 @@ import unittest
 sys.path.insert(0, os.path.join(".."))
 sys.path.insert(0, os.path.join("..",".."))
 sys.path.insert(0, os.path.join("..","..",".."))
-from app.tools.visualiser.builder.net_vis_builder import NetVisBuilder
-from app.tools.visualiser.visual.visual import NetVisVisual
+from app.tools.visualiser.builder.net_vis_view_builder import NetVisBuilder
+from app.tools.visualiser.visual.net_vis_view_visual import NetVisVisual
 from app.storage.storage_strategies.neo4j.storage import Neo4jStorage
 
 TEST_NEO4J_URI = os.getenv("TEST_NEO4J_URI", "bolt://localhost:7687")

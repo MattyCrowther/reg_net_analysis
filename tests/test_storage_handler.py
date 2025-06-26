@@ -8,6 +8,7 @@ sys.path.insert(0, os.path.join("..", "..", ".."))
 
 from app.tools.db_interface.db_interface import DatabaseInterface
 from app.storage.storage_handler import StorageHandler
+from app.storage.storage_strategies.storage_objects import StorageObject
 from app.tools.data_transformer.data_transformer import DataTransformer
 
 TEST_NEO4J_URI = os.getenv("TEST_NEO4J_URI", "bolt://localhost:7687")
@@ -57,3 +58,15 @@ class TestStorageInterface(unittest.TestCase):
         os.remove(out_fn)
         self.assertCountEqual(pre_data,post_data)
 
+    def test_get_in_relationships(self):
+        interface = StorageHandler("neo4j",TEST_NEO4J_URI,
+                                   TEST_NEO4J_USER,
+                                   TEST_NEO4J_PASSWORD)
+        
+        res = interface.get()
+        node = res[0]
+
+        results = interface.get_in_relationships(node.identifier)
+        for n,e in results:
+            self.assertIsInstance(n,StorageObject)
+            self.assertIsInstance(e,str)

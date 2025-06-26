@@ -5,7 +5,7 @@ import unittest
 sys.path.insert(0, os.path.join(".."))
 sys.path.insert(0, os.path.join("..",".."))
 sys.path.insert(0, os.path.join("..","..",".."))
-from app.tools.visualiser.builder.net_vis_builder import NetVisBuilder
+from app.tools.visualiser.builder.net_vis_view_builder import NetVisBuilder
 from app.storage.storage_strategies.neo4j.storage import Neo4jStorage
 from app.model.model import model
 

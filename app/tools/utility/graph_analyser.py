@@ -5,6 +5,9 @@ from collections import defaultdict
 from app.storage.storage_strategies.neo4j.storage import Neo4jStorage
 from app.model.model import model
 
+
+nv_title = str(model.identifiers.external.title)
+
 def analyse(graph):
     '''
     Analysis system just for neo4j graph
@@ -33,8 +36,7 @@ def analyse_graph_metrics(graph):
         "clustering_coefficient": _report_clustering_coefficient(graph),
         "centrality_metrics": _report_centrality(graph),
         "assortativity": _report_assortativity(graph),
-        "node_similarity": _report_node_similarity(graph)
-
+        "node_similarity": _report_node_similarity(graph),
     }
 
 
@@ -63,7 +65,8 @@ def _report_basic_structure(graph):
 
     data["metrics"]["node_count"] = graph.node_count()
     data["metrics"]["edge_count"] = graph.edge_count()
-    data["metrics"]["isolated_nodes"] = [n.identifier for n in graph.get_isolated_nodes()]
+    data["metrics"]["isolated_nodes"] = [_generate_entity_dict(n) for 
+                                         n in graph.get_isolated_nodes()]
     return data
 
 
@@ -310,13 +313,14 @@ def _report_node_similarity(graph):
 
     # Top 10 most similar pairs
     top_pairs = sorted(similarity_data, key=lambda x: x[2], reverse=True)[:10]
+
     top_similar = [
         {
             "rank": i + 1,
             "node_a_label": _get_name(node_a.object_type),
-            "node_a_id": _get_name(node_a.identifier),
+            "node_a_id": _generate_entity_dict(node_a),
             "node_b_label": _get_name(node_b.object_type),
-            "node_b_id": _get_name(node_b.identifier),
+            "node_b_id": _generate_entity_dict(node_b),
             "similarity_score": f"{score:.4f}"
         }
         for i, (node_a, node_b, score) in enumerate(top_pairs)
@@ -330,6 +334,9 @@ def _report_node_similarity(graph):
         }
     }
 
+def _generate_entity_dict(node):
+    return {"title" : node.properties.get(nv_title,["No Title"])[0],
+            "id" : node.identifier}
 
 def _compute_single_centrality(procedure_fn, score_format="{:.4f}"):
     """
@@ -344,7 +351,7 @@ def _compute_single_centrality(procedure_fn, score_format="{:.4f}"):
         {
             "rank": idx + 1,
             "label": _get_name(node.object_type),
-            "id": _get_name(node.identifier),
+            "id": _generate_entity_dict(node),
             "score": score_format.format(score)
         }
         for idx, (node, score) in enumerate(top_nodes)
@@ -465,10 +472,10 @@ def _sequence_similarity(nodes):
     for node in nodes:
         seq = node.properties.get(sequence_predicate)
         if seq:
-            sequence_dict[seq[0].lower()].append(_get_name(node.identifier))
+            sequence_dict[seq[0].lower()].append(node)
 
     shared_sequences = {
-        seq: [_get_name(i) for i in ids]
+        seq: [_generate_entity_dict(i) for i in ids]
         for seq, ids in sequence_dict.items()
         if len(ids) > 1
     }

@@ -13,7 +13,7 @@ from app.tools.visualiser.visual.handlers.net_vis.shape import EdgeShapeHandler
 default_stylesheet_fn = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), "default_stylesheet.txt")
 
-class Visual:
+class ViewVisual:
     def __init__(self,builder,
                  layout_handler=None,
                  node_label_handler=None,
@@ -74,13 +74,18 @@ class Visual:
                         self._edge_shape_handler,]
 
         self._stylesheet = self._build_default_stylesheet()
-
-    # -- View --
-    def get_view_options(self):
-        return self._builder.get_builder_options()
     
-    def set_view(self,view_builder=None):
-        return self._builder.set_view(view_builder=view_builder)
+    def build(self):
+        elements = self.get_view_elements()
+        layout = self.get_layout()
+        elements = self.add_node_labels(elements)
+        elements = self.add_edge_labels(elements)
+        elements = self.add_node_colour(elements)
+        elements = self.add_edge_colour(elements)
+        elements = self.add_node_size(elements)
+        elements = self.add_node_shape(elements)
+        elements = self.add_edge_shape(elements)
+        return layout,elements
     
     def get_view_elements(self,sub_view=None):
         return self._builder.get_view_elements(sub_view=sub_view)
@@ -136,21 +141,7 @@ class Visual:
         if style is not None:
             self._stylesheet = style
         return elements
-            
-    def build(self,view_builder=None):
-        self.set_view(view_builder=view_builder)
-        elements = self.get_view_elements()
-        layout = self.get_layout()
-        elements = self.add_node_labels(elements)
-        elements = self.add_edge_labels(elements)
-        elements = self.add_node_colour(elements)
-        elements = self.add_edge_colour(elements)
-        elements = self.add_node_size(elements)
-        elements = self.add_node_shape(elements)
-        elements = self.add_edge_shape(elements)
-        return layout,elements
-        
-
+    
     def add_node_labels(self,elements,label_type=None):
         return self._node_label_handler.build(elements,
                                               builder_type=label_type)
