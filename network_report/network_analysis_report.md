@@ -10,7 +10,7 @@
 
 **Author:** Mcrowther  
 
-**Date:** 2025-06-26  
+**Date:** 2025-07-04  
 
 **Project:** Graph Metrics
 
@@ -104,10 +104,10 @@ Measures the number of direct connections a node has. High degree centrality ind
 |4|TranscriptionUnit|<ul><li>title:sufABCDSE</li><li>id:http://www.nv_ontology.org/a5979848-df36-4134-adce-95ac54fef466</li></ul>|6.00|
 |5|TranscriptionUnit|<ul><li>title:sufABCDSE</li><li>id:http://www.nv_ontology.org/9ca65ff1-ae7a-4a47-80d8-74a4bd3140f2</li></ul>|6.00|
 |6|TranscriptionUnit|<ul><li>title:sufABCDSE</li><li>id:http://www.nv_ontology.org/523a36af-8661-491b-bf2c-979987852944</li></ul>|6.00|
-|7|Protein|<ul><li>title:DNA-binding transcriptional activator AaeR</li><li>id:http://www.nv_ontology.org/386bf92b-408c-47cc-988f-6b19de75f660</li></ul>|4.00|
-|8|TranscriptionUnit|<ul><li>title:rpsF-priB-rpsR-rplI</li><li>id:http://www.nv_ontology.org/2564b43c-8164-4d32-848c-8d559a192189</li></ul>|4.00|
-|9|TranscriptionUnit|<ul><li>title:gadEF-mdtEF</li><li>id:http://www.nv_ontology.org/ff059ade-5592-4710-bd62-86653c5cfe22</li></ul>|4.00|
-|10|TranscriptionUnit|<ul><li>title:rpsF-priB-rpsR-rplI</li><li>id:http://www.nv_ontology.org/5f9d46ad-0006-4fe9-8d13-5cf21dadd148</li></ul>|4.00|
+|7|TranscriptionUnit|<ul><li>title:gadEF-mdtEF</li><li>id:http://www.nv_ontology.org/ff059ade-5592-4710-bd62-86653c5cfe22</li></ul>|4.00|
+|8|TranscriptionUnit|<ul><li>title:rpsF-priB-rpsR-rplI</li><li>id:http://www.nv_ontology.org/5f9d46ad-0006-4fe9-8d13-5cf21dadd148</li></ul>|4.00|
+|9|Protein|<ul><li>title:DNA-binding transcriptional activator AaeR</li><li>id:http://www.nv_ontology.org/4ff668d4-f4ea-42a7-9b95-b83cf2255621</li></ul>|4.00|
+|10|TranscriptionUnit|<ul><li>title:gadEF-mdtEF</li><li>id:http://www.nv_ontology.org/adcababc-9eee-4165-8a2a-78b6effe361d</li></ul>|4.00|
 
 
 
@@ -130,10 +130,10 @@ Captures how often a node lies on the shortest paths between other nodes. Nodes 
 |4|TranscriptionUnit|<ul><li>title:sufABCDSE</li><li>id:http://www.nv_ontology.org/a5979848-df36-4134-adce-95ac54fef466</li></ul>|6.0000|
 |5|TranscriptionUnit|<ul><li>title:sufABCDSE</li><li>id:http://www.nv_ontology.org/9ca65ff1-ae7a-4a47-80d8-74a4bd3140f2</li></ul>|6.0000|
 |6|TranscriptionUnit|<ul><li>title:sufABCDSE</li><li>id:http://www.nv_ontology.org/523a36af-8661-491b-bf2c-979987852944</li></ul>|6.0000|
-|7|Protein|<ul><li>title:DNA-binding transcriptional activator AaeR</li><li>id:http://www.nv_ontology.org/386bf92b-408c-47cc-988f-6b19de75f660</li></ul>|4.0000|
-|8|TranscriptionUnit|<ul><li>title:rpsF-priB-rpsR-rplI</li><li>id:http://www.nv_ontology.org/2564b43c-8164-4d32-848c-8d559a192189</li></ul>|4.0000|
-|9|TranscriptionUnit|<ul><li>title:gadEF-mdtEF</li><li>id:http://www.nv_ontology.org/ff059ade-5592-4710-bd62-86653c5cfe22</li></ul>|4.0000|
-|10|TranscriptionUnit|<ul><li>title:rpsF-priB-rpsR-rplI</li><li>id:http://www.nv_ontology.org/5f9d46ad-0006-4fe9-8d13-5cf21dadd148</li></ul>|4.0000|
+|7|TranscriptionUnit|<ul><li>title:gadEF-mdtEF</li><li>id:http://www.nv_ontology.org/ff059ade-5592-4710-bd62-86653c5cfe22</li></ul>|4.0000|
+|8|TranscriptionUnit|<ul><li>title:rpsF-priB-rpsR-rplI</li><li>id:http://www.nv_ontology.org/5f9d46ad-0006-4fe9-8d13-5cf21dadd148</li></ul>|4.0000|
+|9|Protein|<ul><li>title:DNA-binding transcriptional activator AaeR</li><li>id:http://www.nv_ontology.org/4ff668d4-f4ea-42a7-9b95-b83cf2255621</li></ul>|4.0000|
+|10|TranscriptionUnit|<ul><li>title:gadEF-mdtEF</li><li>id:http://www.nv_ontology.org/adcababc-9eee-4165-8a2a-78b6effe361d</li></ul>|4.0000|
 
 
 
@@ -150,16 +150,16 @@ Reflects how close a node is to all other nodes in the network. Nodes with high 
 **Top Nodes**
 |Rank|Label|Id|Score|
 | :---: | :---: | :---: | :---: |
-|1|Gene|<ul><li>title:rffG</li><li>id:http://www.nv_ontology.org/1d6da37a-e09d-49b3-afcd-6f940811c99f</li></ul>|1.0000|
-|2|Promoter|<ul><li>title:speCp</li><li>id:http://www.nv_ontology.org/533a23a3-114f-4ff3-9ddc-f94c71f5aee6</li></ul>|1.0000|
-|3|Promoter|<ul><li>title:ppdAp</li><li>id:http://www.nv_ontology.org/0cd4996d-7182-41ed-9c24-628b5ac72389</li></ul>|1.0000|
-|4|Promoter|<ul><li>title:mqsAp2</li><li>id:http://www.nv_ontology.org/904911f2-27ed-4b49-820f-3f2cb90ed395</li></ul>|1.0000|
-|5|Gene|<ul><li>title:argV</li><li>id:http://www.nv_ontology.org/78280d9c-ceb8-439b-9338-5b9438b9e427</li></ul>|1.0000|
-|6|Gene|<ul><li>title:sibB</li><li>id:http://www.nv_ontology.org/7a97e3aa-416a-4ed4-a352-22fa91aa1b61</li></ul>|1.0000|
-|7|Promoter|<ul><li>title:sibBp</li><li>id:http://www.nv_ontology.org/8df83023-152f-470f-877e-5b1689d9934d</li></ul>|1.0000|
-|8|Gene|<ul><li>title:def</li><li>id:http://www.nv_ontology.org/6a24f2a5-db54-4918-9182-206f3838d93d</li></ul>|1.0000|
-|9|Gene|<ul><li>title:phoU</li><li>id:http://www.nv_ontology.org/70963538-ed66-4669-81e5-a0e3404f5ea8</li></ul>|1.0000|
-|10|Gene|<ul><li>title:nemA</li><li>id:http://www.nv_ontology.org/bd85f64c-d7ae-4847-87bb-5c3e217f90e9</li></ul>|1.0000|
+|1|Gene|<ul><li>title:ftsW</li><li>id:http://www.nv_ontology.org/80602786-26e7-400e-81e2-d1d2b63a2846</li></ul>|1.0000|
+|2|Promoter|<ul><li>title:fadLp</li><li>id:http://www.nv_ontology.org/771289eb-43cc-4012-80a1-7972f03dc291</li></ul>|1.0000|
+|3|Gene|<ul><li>title:ryfD</li><li>id:http://www.nv_ontology.org/f688d7ce-6bbd-4357-92d9-28b3571649a0</li></ul>|1.0000|
+|4|Promoter|<ul><li>title:lrpp</li><li>id:http://www.nv_ontology.org/5331b337-3336-46b4-885d-914d86fa823f</li></ul>|1.0000|
+|5|Gene|<ul><li>title:mazF</li><li>id:http://www.nv_ontology.org/df868270-e8f5-4be7-a2ea-c3963c1af1f8</li></ul>|1.0000|
+|6|Gene|<ul><li>title:hybG</li><li>id:http://www.nv_ontology.org/508ca9d8-a077-4fc1-a92e-ab6968768ec5</li></ul>|1.0000|
+|7|Promoter|<ul><li>title:fiup</li><li>id:http://www.nv_ontology.org/ac234671-2d48-459e-bb21-8b0b1d5e287a</li></ul>|1.0000|
+|8|Gene|<ul><li>title:valY</li><li>id:http://www.nv_ontology.org/8425d2d5-805b-48be-ae6b-c92533142fd8</li></ul>|1.0000|
+|9|TranscriptionUnit|<ul><li>title:talA-tktB</li><li>id:http://www.nv_ontology.org/3157e001-a332-4889-a944-3ecb68bbf02f</li></ul>|1.0000|
+|10|Gene|<ul><li>title:purA</li><li>id:http://www.nv_ontology.org/7657c90d-b68f-4fbe-a039-c83eb585ec47</li></ul>|1.0000|
 
 
 
@@ -171,7 +171,7 @@ A probability-based measure originally developed by Google to rank web pages. It
 * **Maximum** : 13.154999999999953  
 * **Mean** : 0.2121451276595745  
 * **Median** : 0.21375000000000002  
-* **Standard Deviation** : 0.18993664335826266  
+* **Standard Deviation** : 0.18993664335826269  
 
 **Top Nodes**
 |Rank|Label|Id|Score|
@@ -193,11 +193,11 @@ A probability-based measure originally developed by Google to rank web pages. It
 
 
 Evaluates a node’s influence based on the principle that connections to high-scoring nodes contribute more to the score of the node. Unlike degree centrality, which counts all neighbors equally, eigenvector centrality gives more weight to connections with influential nodes.  
-* **Minimum** : 7.203759123103376e-05  
-* **Maximum** : 0.38064533957460295  
-* **Mean** : 0.002502274282410783  
-* **Median** : 0.0019375929931103077  
-* **Standard Deviation** : 0.007104661291580055  
+* **Minimum** : 7.203759123102939e-05  
+* **Maximum** : 0.38064533957457936  
+* **Mean** : 0.002502274282410627  
+* **Median** : 0.0019375929931101878  
+* **Standard Deviation** : 0.007104661291579609  
 
 **Top Nodes**
 |Rank|Label|Id|Score|
@@ -205,13 +205,13 @@ Evaluates a node’s influence based on the principle that connections to high-s
 |1|TranscriptionFactor|<ul><li>title:ppGpp</li><li>id:http://www.nv_ontology.org/6a0c6b7a-fca8-4ff1-a306-713a1310aa38</li></ul>|0.380645|
 |2|TranscriptionFactor|<ul><li>title:ppGpp</li><li>id:http://www.nv_ontology.org/fca22d5e-ca34-40d2-ad07-c8e8b6570b72</li></ul>|0.380645|
 |3|TranscriptionFactor|<ul><li>title:ppGpp</li><li>id:http://www.nv_ontology.org/42366ea1-8807-464b-ba4f-b74110f732f1</li></ul>|0.380645|
-|4|Gene|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/283c83c3-5c7b-4833-9a9d-856871c784be</li></ul>|0.078244|
-|5|Gene|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/53651cfe-0968-41f1-9dd9-56738cdfd96b</li></ul>|0.078244|
-|6|Gene|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/5a751186-3590-46bb-999b-713ad920055b</li></ul>|0.078244|
-|7|Gene|<ul><li>title:gadC</li><li>id:http://www.nv_ontology.org/e672ec3d-103d-4c89-9b8d-9f0be23cba99</li></ul>|0.074513|
-|8|Gene|<ul><li>title:gadC</li><li>id:http://www.nv_ontology.org/a8535d21-f820-4d8b-aa00-2c6e82af95a0</li></ul>|0.074513|
-|9|Gene|<ul><li>title:gadC</li><li>id:http://www.nv_ontology.org/d54653c2-e674-4482-ba98-57b478f1720e</li></ul>|0.074513|
-|10|Gene|<ul><li>title:gabD</li><li>id:http://www.nv_ontology.org/50ccdb50-418e-4bc4-954f-6947c5c6b93b</li></ul>|0.052187|
+|4|Gene|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/5a751186-3590-46bb-999b-713ad920055b</li></ul>|0.078244|
+|5|Gene|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/283c83c3-5c7b-4833-9a9d-856871c784be</li></ul>|0.078244|
+|6|Gene|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/53651cfe-0968-41f1-9dd9-56738cdfd96b</li></ul>|0.078244|
+|7|Gene|<ul><li>title:gadC</li><li>id:http://www.nv_ontology.org/d54653c2-e674-4482-ba98-57b478f1720e</li></ul>|0.074513|
+|8|Gene|<ul><li>title:gadC</li><li>id:http://www.nv_ontology.org/e672ec3d-103d-4c89-9b8d-9f0be23cba99</li></ul>|0.074513|
+|9|Gene|<ul><li>title:gadC</li><li>id:http://www.nv_ontology.org/a8535d21-f820-4d8b-aa00-2c6e82af95a0</li></ul>|0.074513|
+|10|Gene|<ul><li>title:gabT</li><li>id:http://www.nv_ontology.org/f88f2096-20b9-436e-a3a9-97b2b29929d8</li></ul>|0.052187|
 
 
 
@@ -235,16 +235,16 @@ Cosine similarity compares nodes based on the overlap of their neighbors. Each n
 **Similar Node Pairs**
 |Rank|Node A Label|Node A Id|Node B Label|Node B Id|Similarity Score|
 | :---: | :---: | :---: | :---: | :---: | :---: |
-|1|TranscriptionUnit|<ul><li>title:hdeD</li><li>id:http://www.nv_ontology.org/95fd2f61-32a3-43be-a0af-4b6b5b0a26b9</li></ul>|TranscriptionUnit|<ul><li>title:hdeD</li><li>id:http://www.nv_ontology.org/71e056ea-5c46-47b6-90bb-be1ce7b64465</li></ul>|1.0000|
-|2|TranscriptionUnit|<ul><li>title:dps</li><li>id:http://www.nv_ontology.org/aa8adf1e-2c79-473c-a795-237f4f003da9</li></ul>|TranscriptionUnit|<ul><li>title:dps</li><li>id:http://www.nv_ontology.org/678ba121-eefe-4ad0-b099-6c778edefe96</li></ul>|1.0000|
-|3|TranscriptionUnit|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/64711325-c62b-4423-ae1f-0f3f66b435f8</li></ul>|TranscriptionUnit|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/40c3004e-6301-4d08-a87e-7b4f858961b6</li></ul>|1.0000|
-|4|TranscriptionUnit|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/64711325-c62b-4423-ae1f-0f3f66b435f8</li></ul>|TranscriptionUnit|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/26e23068-b3fb-42e8-9ded-9d611f282697</li></ul>|1.0000|
-|5|TranscriptionUnit|<ul><li>title:gadBC</li><li>id:http://www.nv_ontology.org/0a9d2cc7-cc85-4b7f-a107-69763f994d6f</li></ul>|TranscriptionUnit|<ul><li>title:gadBC</li><li>id:http://www.nv_ontology.org/fc71f873-66b3-47e4-adda-c7584fe08757</li></ul>|1.0000|
-|6|TranscriptionUnit|<ul><li>title:osmY</li><li>id:http://www.nv_ontology.org/c6650072-1012-4839-9d1e-f22bfde231e5</li></ul>|TranscriptionUnit|<ul><li>title:osmY</li><li>id:http://www.nv_ontology.org/0c05782f-2753-41aa-83c3-0f75f41150e1</li></ul>|1.0000|
-|7|TranscriptionUnit|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/26e23068-b3fb-42e8-9ded-9d611f282697</li></ul>|TranscriptionUnit|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/40c3004e-6301-4d08-a87e-7b4f858961b6</li></ul>|1.0000|
-|8|TranscriptionUnit|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/26e23068-b3fb-42e8-9ded-9d611f282697</li></ul>|TranscriptionUnit|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/64711325-c62b-4423-ae1f-0f3f66b435f8</li></ul>|1.0000|
-|9|TranscriptionUnit|<ul><li>title:gadBC</li><li>id:http://www.nv_ontology.org/cc9f1fe4-80ec-44a0-8225-9b4892f43937</li></ul>|TranscriptionUnit|<ul><li>title:gadBC</li><li>id:http://www.nv_ontology.org/13ba7d7e-e82a-4051-bdbc-bb796144a49f</li></ul>|1.0000|
-|10|TranscriptionUnit|<ul><li>title:hdeD</li><li>id:http://www.nv_ontology.org/1ee598d1-779e-4e79-90b3-18353a84aa26</li></ul>|TranscriptionUnit|<ul><li>title:hdeD</li><li>id:http://www.nv_ontology.org/c3519eb3-9946-4a18-8b74-d2e3dcac1742</li></ul>|1.0000|
+|1|TranscriptionUnit|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/40c3004e-6301-4d08-a87e-7b4f858961b6</li></ul>|TranscriptionUnit|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/26e23068-b3fb-42e8-9ded-9d611f282697</li></ul>|1.0000|
+|2|TranscriptionUnit|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/40c3004e-6301-4d08-a87e-7b4f858961b6</li></ul>|TranscriptionUnit|<ul><li>title:csrA</li><li>id:http://www.nv_ontology.org/64711325-c62b-4423-ae1f-0f3f66b435f8</li></ul>|1.0000|
+|3|TranscriptionUnit|<ul><li>title:gadBC</li><li>id:http://www.nv_ontology.org/c398a7ff-8057-4171-99c6-e9d48c007e17</li></ul>|TranscriptionUnit|<ul><li>title:gadBC</li><li>id:http://www.nv_ontology.org/12c6ed4b-7152-4d4d-a5ad-d33a3edb028c</li></ul>|1.0000|
+|4|TranscriptionUnit|<ul><li>title:gadBC</li><li>id:http://www.nv_ontology.org/12c6ed4b-7152-4d4d-a5ad-d33a3edb028c</li></ul>|TranscriptionUnit|<ul><li>title:gadBC</li><li>id:http://www.nv_ontology.org/c398a7ff-8057-4171-99c6-e9d48c007e17</li></ul>|1.0000|
+|5|TranscriptionUnit|<ul><li>title:hdeAB-yhiD</li><li>id:http://www.nv_ontology.org/3794c055-c7b6-4cea-8c00-e1281d9f6f1a</li></ul>|TranscriptionUnit|<ul><li>title:hdeAB-yhiD</li><li>id:http://www.nv_ontology.org/dd0dc58f-7f28-4417-a92c-b8976e4b9d27</li></ul>|1.0000|
+|6|TranscriptionUnit|<ul><li>title:patA</li><li>id:http://www.nv_ontology.org/4b69b61a-d207-409b-8621-2a36f283a973</li></ul>|TranscriptionUnit|<ul><li>title:patA</li><li>id:http://www.nv_ontology.org/2742f33c-b682-4905-be5e-8ddc87218985</li></ul>|1.0000|
+|7|TranscriptionUnit|<ul><li>title:hdeD</li><li>id:http://www.nv_ontology.org/c3519eb3-9946-4a18-8b74-d2e3dcac1742</li></ul>|TranscriptionUnit|<ul><li>title:hdeD</li><li>id:http://www.nv_ontology.org/1ee598d1-779e-4e79-90b3-18353a84aa26</li></ul>|1.0000|
+|8|TranscriptionUnit|<ul><li>title:hdeD</li><li>id:http://www.nv_ontology.org/44594c95-84a8-47e8-a087-486071858b4b</li></ul>|TranscriptionUnit|<ul><li>title:hdeD</li><li>id:http://www.nv_ontology.org/d4da5e77-c078-4e24-b9c4-7a6fd360655e</li></ul>|1.0000|
+|9|TranscriptionUnit|<ul><li>title:dps</li><li>id:http://www.nv_ontology.org/fabb2359-5ba7-4b66-af82-16529285d6d3</li></ul>|TranscriptionUnit|<ul><li>title:dps</li><li>id:http://www.nv_ontology.org/d1e3a8c0-ee37-4ced-8d43-b1af47e096c2</li></ul>|1.0000|
+|10|TranscriptionUnit|<ul><li>title:osmY</li><li>id:http://www.nv_ontology.org/07f952ae-a169-4bd6-b104-2554d2d50da5</li></ul>|TranscriptionUnit|<ul><li>title:osmY</li><li>id:http://www.nv_ontology.org/580d72e8-e277-4db1-98bf-43cfa97bd45b</li></ul>|1.0000|
 
 
 
